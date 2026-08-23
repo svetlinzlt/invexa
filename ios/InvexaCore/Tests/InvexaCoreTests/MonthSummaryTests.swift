@@ -74,8 +74,14 @@ struct MonthSummaryTests {
         let february = Fixed.month(2026, 2)
         let summary = MonthSummary(month: february, flows: [], calendar: Fixed.calendar)
 
+        // Извикването стои извън `#expect` нарочно. Макросът разлага
+        // извикванията на функции, за да опише израза при провал, а
+        // `allSatisfy` е `rethrows` — разширението не слага `try` и
+        // компилаторът спира. Изнасянето в променлива го заобикаля.
+        let everyDayIsZero = summary.dailySpending.allSatisfy(\.isZero)
+
         #expect(summary.dailySpending.count == 28)
-        #expect(summary.dailySpending.allSatisfy(\.isZero))
+        #expect(everyDayIsZero)
     }
 
     @Test("Разходът пада на своя ден, а не на съседния")
