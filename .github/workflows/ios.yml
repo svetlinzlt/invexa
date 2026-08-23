@@ -67,6 +67,17 @@ jobs:
             | tee build.log
         # Без подпис и без Team ID — за симулатор Apple не ги изисква.
 
+      - name: Сглобяване за часовник
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project ios/Invexa.xcodeproj \
+            -scheme InvexaWatch \
+            -destination 'generic/platform=watchOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee watch.log
+
       - name: Само грешките, ако е паднало
         if: failure()
-        run: grep -E "error:|warning:" build.log | head -60
+        run: grep -hE "error:" build.log watch.log 2>/dev/null | sort -u | head -40

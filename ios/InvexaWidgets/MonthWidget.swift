@@ -160,11 +160,47 @@ struct MonthWidgetEntryView: View {
             MonthAccessoryView(entry: entry)
         case .accessoryInline:
             Text("\(entry.summary.spent.formatted()) този месец")
+        #if os(watchOS)
+        case .accessoryCircular, .accessoryCorner:
+            MonthGaugeView(entry: entry)
+        #endif
         default:
             MonthWidgetView(entry: entry)
         }
     }
 }
+
+#if os(watchOS)
+/// Кръглото усложнение на циферблата.
+///
+/// Показва каква част от приходите е излязла. Стрелката пълни кръга, докато
+/// харчиш — това е достатъчно от един поглед, а точната сума живее в
+/// правоъгълното усложнение.
+struct MonthGaugeView: View {
+    let entry: MonthEntry
+
+    private var fraction: Double {
+        let income = entry.summary.income.minorUnits
+        guard income > 0 else { return 0 }
+        return min(1, Double(entry.summary.spent.minorUnits) / Double(income))
+    }
+
+    var body: some View {
+        Gauge(value: fraction) {
+            Image(systemName: "creditcard")
+        } currentValueLabel: {
+            Text(compact)
+        }
+        .gaugeStyle(.accessoryCircular)
+        .widgetAccentable()
+    }
+
+    /// В кръга има място за няколко знака. Стотинките само пречат.
+    private var compact: String {
+        "\(entry.summary.spent.minorUnits / 100)"
+    }
+}
+#endif
 
 struct MonthWidget: Widget {
     var body: some WidgetConfiguration {
@@ -177,18 +213,16 @@ struct MonthWidget: Widget {
         }
         .configurationDisplayName("Месецът")
         .description("Колко е излязло досега и как върви месецът.")
-        .supportedFamilies([
-            .systemSmall,
-            .systemMedium,
-            .accessoryRectangular,
-            .accessoryInline,
-        ])
+        .supportedFamilies(Self.families)
     }
-}
 
-@main
-struct InvexaWidgets: WidgetBundle {
-    var body: some Widget {
-        MonthWidget()
+    /// Часовникът няма големите семейства, а телефонът няма кръговото и
+    /// ъгловото. Списъкът се разделя тук, за да остане останалият код общ.
+    static var families: [WidgetFamily] {
+        #if os(watchOS)
+        [.accessoryCircular, .accessoryCorner, .accessoryRectangular, .accessoryInline]
+        #else
+        [.systemSmall, .systemMedium, .accessoryRectangular, .accessoryInline]
+        #endif
     }
 }
