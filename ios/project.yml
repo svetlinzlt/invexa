@@ -1,14 +1,10 @@
 # Конфигурация на Xcode проекта за XcodeGen.
 #
-# Файлът `.xcodeproj` е двоичен, огромен и се чупи при сливане. Затова тук
-# стои описанието му като текст, а самият проект се поражда с една команда:
-#
 #     brew install xcodegen && cd ios && xcodegen generate
 #
-# Ползата не е само удобство. Правата, App Group-ите и членството на файловете
-# по цели са най-честият източник на тихи грешки — забравена App Group на
-# виджета изглежда като липсващи данни, не като липсващо право. Тук те са
-# записани веднъж и се възпроизвеждат еднакво всеки път.
+# Файлът `.xcodeproj` е двоичен, огромен и се чупи при сливане. Тук стои
+# описанието му като текст: правата, App Group-ите и членството на файловете
+# по цели са записани веднъж и се възпроизвеждат еднакво всеки път.
 
 name: Invexa
 
@@ -21,12 +17,15 @@ options:
 
 settings:
   base:
-    SWIFT_VERSION: "6.0"
-    SWIFT_STRICT_CONCURRENCY: complete
-    DEVELOPMENT_TEAM: ""          # ← попълва се с твоя Team ID от Apple Developer
+    # Първото компилиране търси синтактични грешки, не състезания за данни.
+    # След първото зелено сглобяване се вдига на 6.0 и се минава втори път —
+    # иначе десетки предупреждения за конкурентност заравят истинските грешки.
+    SWIFT_VERSION: "5.0"
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
+    # DEVELOPMENT_TEAM се задава чак когато има истинско устройство или
+    # TestFlight. За симулатор не е нужен и празна стойност само пречи.
 
 packages:
   InvexaCore:
@@ -42,28 +41,30 @@ targets:
       - path: Invexa
     dependencies:
       - package: InvexaCore
+        product: InvexaCore
       - target: InvexaWidgets
         embed: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.invexa
         CODE_SIGN_ENTITLEMENTS: Invexa/Invexa.entitlements
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
-        # Без този текст iOS отказва да покаже Face ID подканата.
-        INFOPLIST_KEY_NSFaceIDUsageDescription: "Заключва месеца ти, за да не се вижда от всеки, който вземе телефона."
+    # Ключовете стоят тук, а не като INFOPLIST_KEY_* настройки: щом сочим
+    # собствен Info.plist, Xcode спира да генерира и настройките се
+    # пренебрегват мълчаливо. Тогава Face ID подканата изчезва без грешка.
     info:
       path: Invexa/Info.plist
       properties:
         CFBundleDisplayName: Invexa
         CFBundleShortVersionString: $(MARKETING_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSFaceIDUsageDescription: "Заключва месеца ти, за да не се вижда от всеки, който вземе телефона."
         # Схемата, с която виджетът отваря записването.
         CFBundleURLTypes:
           - CFBundleURLName: app.invexa
             CFBundleURLSchemes: [invexa]
-        # Ако някой от файловете липсва, шрифтът пада тихо към системния и
-        # екранът изглежда почти правилно. Затова имената стоят изброени.
+        # Ако някой файл липсва, шрифтът пада тихо към системния и екранът
+        # изглежда почти правилно. Затова имената стоят изброени.
         UIAppFonts:
           - BodoniModa-Bold.ttf
           - BodoniModa-BoldItalic.ttf
@@ -80,12 +81,13 @@ targets:
     sources:
       - path: InvexaWidgets
       # Виджетът е отделен процес и има нужда от същите типове. Изброяването
-      # им тук заменя ръчното отмятане на членство по цели — стъпката, която
+      # тук заменя ръчното отмятане на членство по цели — стъпката, която
       # най-лесно се забравя при добавяне на нов файл.
       - path: Invexa/Design
       - path: Invexa/Storage
     dependencies:
       - package: InvexaCore
+        product: InvexaCore
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.invexa.widgets
@@ -104,7 +106,6 @@ schemes:
         Invexa: all
     run:
       config: Debug
-    test:
-      config: Debug
-      targets:
-        - InvexaCore/InvexaCoreTests
+    # Тестовете на пакета се пускат с `swift test`, в отделна задача на
+    # работния поток. Схемата не може да ги сочи: XcodeGen чете
+    # `InvexaCore/InvexaCoreTests` като външен проект и спира с грешка.
