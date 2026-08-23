@@ -164,7 +164,9 @@ struct ImportSheet: View {
     /// се сваля отново и се внася втори път. Съвпаденията се показват, но не
     /// се избират сами.
     private func isDuplicate(_ candidate: ImportCandidate) -> Bool {
-        existing.contains { candidate.looksLike($0.asFlow()) }
+        // `StoredFlow.asFlow` е свойство, а `ImportCandidate.asFlow()` е
+        // функция. Двете носят едно име и се различават само по скобите.
+        existing.contains { candidate.looksLike($0.asFlow) }
     }
 
     private func selectable(_ report: ImportReport) -> [ImportCandidate] {

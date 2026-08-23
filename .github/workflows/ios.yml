@@ -54,6 +54,10 @@ jobs:
 
       - name: Сглобяване
         run: |
+          # Без `pipefail` bash връща статуса на последната команда в
+          # конвейера. `tee` винаги успява, значи паднало сглобяване се
+          # отчита като зелено — по-опасно от червено, защото се вярва.
+          set -o pipefail
           xcodebuild build \
             -project ios/Invexa.xcodeproj \
             -scheme Invexa \
