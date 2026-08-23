@@ -86,11 +86,11 @@ public enum CSVParser {
                 insideQuotes = true
             case separator:
                 closeField()
-            case "\r":
-                // Поглъщаме `\r\n` като един край на ред.
-                if let next = iterator.next(), next != "\n" { pending = next }
-                closeRow()
-            case "\n":
+            // Swift брои графемни клъстери, а не байтове, и `\r\n` е **един**
+            // `Character`. Затова `case "\r"` сам не хваща краищата на редове
+            // от Windows — символът не съвпада с него и текстът от два реда се
+            // слепва в едно поле. И трите форми се изброяват изрично.
+            case "\r\n", "\n", "\r":
                 closeRow()
             default:
                 current.append(character)
