@@ -12,6 +12,7 @@ options:
   bundleIdPrefix: app.invexa
   deploymentTarget:
     iOS: "18.0"
+    watchOS: "11.0"
   createIntermediateGroups: true
   groupSortPosition: top
 
@@ -99,11 +100,72 @@ targets:
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
 
+  # ── Часовникът ───────────────────────────────────────────────
+  # Приложението е малко нарочно: часовникът отговаря на един въпрос при
+  # вдигане на китката. Съществува и защото усложненията не могат да живеят
+  # без приложение-домакин.
+  #
+  # Данните идват през iCloud, не през App Group: часовникът е отделно
+  # устройство и не вижда папката на телефона.
+  InvexaWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: InvexaWatch
+      - path: Invexa/Design
+      - path: Invexa/Storage
+    dependencies:
+      - package: InvexaCore
+        product: InvexaCore
+      - target: InvexaWatchWidgets
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.invexa.watchkitapp
+        CODE_SIGN_ENTITLEMENTS: InvexaWatch/InvexaWatch.entitlements
+    info:
+      path: InvexaWatch/Info.plist
+      properties:
+        CFBundleDisplayName: Invexa
+        WKApplication: true
+        # Свързва часовниковото приложение с телефонното.
+        WKCompanionAppBundleIdentifier: app.invexa
+
+  InvexaWatchWidgets:
+    type: app-extension
+    platform: watchOS
+    sources:
+      - path: InvexaWatchWidgets
+      # Самият виджет е споделен с телефона; тук се внася същият код.
+      - path: InvexaWidgets/MonthWidget.swift
+      - path: Invexa/Design
+      - path: Invexa/Storage
+    dependencies:
+      - package: InvexaCore
+        product: InvexaCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.invexa.watchkitapp.widgets
+        CODE_SIGN_ENTITLEMENTS: InvexaWatch/InvexaWatch.entitlements
+    info:
+      path: InvexaWatchWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Invexa
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+
 schemes:
   Invexa:
     build:
       targets:
         Invexa: all
+    run:
+      config: Debug
+
+  InvexaWatch:
+    build:
+      targets:
+        InvexaWatch: all
     run:
       config: Debug
     # Тестовете на пакета се пускат с `swift test`, в отделна задача на
