@@ -27,6 +27,11 @@ final class AppLock {
     private let defaults = UserDefaults(suiteName: InvexaStore.appGroupID) ?? .standard
     private let key = "lock.enabled"
 
+    /// `nonisolated`, защото `@State private var lock = AppLock()` се
+    /// изчислява при създаването на изгледа, а то не е на главния актьор.
+    /// Без това Swift 6 отказва да строи класа оттам.
+    nonisolated init() {}
+
     var isEnabled: Bool {
         get { defaults.object(forKey: key) as? Bool ?? true }
         set {

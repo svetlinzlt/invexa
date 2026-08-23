@@ -15,11 +15,16 @@ public enum InvexaStore {
     /// възможност към целта на приложението **и** към целта на виджета.
     public static let appGroupID = "group.app.invexa"
 
-    public static let schema = Schema([
-        StoredFlow.self,
-        StoredRecurringRule.self,
-        StoredCategoryRule.self,
-    ])
+    /// Изчислимо, а не `static let`: `Schema` е клас и не е `Sendable`, а
+    /// Swift 6 отхвърля споделено изменяемо глобално състояние. Строенето му
+    /// е евтино и се случва веднъж на процес.
+    public static var schema: Schema {
+        Schema([
+            StoredFlow.self,
+            StoredRecurringRule.self,
+            StoredCategoryRule.self,
+        ])
+    }
 
     public static func makeContainer(inMemory: Bool = false) throws -> ModelContainer {
         let configuration = ModelConfiguration(
