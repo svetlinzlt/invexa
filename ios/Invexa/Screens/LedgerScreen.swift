@@ -124,7 +124,8 @@ private struct DayHeader: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            CapLabel(title)
+            // Датата вече е форматирана по езика на устройството.
+            CapLabel(verbatim: title)
             Spacer()
             Text(total)
                 .font(.ledger(9))

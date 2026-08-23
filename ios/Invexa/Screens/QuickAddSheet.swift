@@ -73,7 +73,8 @@ struct QuickAddSheet: View {
             kindPicker
 
             VStack(spacing: 5) {
-                CapLabel(title)
+                // `title` вече е минал през `String(localized:)`.
+                CapLabel(verbatim: title)
 
                 TextField("0,00", text: $amountText)
                     .font(.amount(46))
