@@ -1,0 +1,770 @@
+<title>Нивото на месеца</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+
+<style>
+/* ── Light is the committed world; dark is designed, not inverted ── */
+:root{
+  --bg:      #FFFFFF;
+  --surface: #F1F1EE;
+  --ink:     #0A0A0A;
+  --ink-2:   #56565A;
+  --ink-3:   #8C8C92;
+  --line:    #0A0A0A;
+  --line-2:  #D6D6D2;
+  --on-ink:  #FFFFFF;
+
+  /* Screen-print inks — constant in both themes */
+  --c1:#0A2BFF;  /* хранителни стоки */
+  --c2:#7A5AF8;  /* жилище */
+  --c3:#FF3D9A;  /* заведения */
+  --c4:#00B26A;  /* транспорт */
+  --c5:#FFE500;  /* сметки */
+  --c6:#00C2D4;  /* останали */
+  --warn:#FFE500;
+
+  --ff-d:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --ff-b:"Instrument Sans", -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A0A0A; --surface:#161616; --ink:#F4F4F2; --ink-2:#A6A6A6; --ink-3:#6E6E70;
+    --line:#F4F4F2; --line-2:#2E2E2E; --on-ink:#0A0A0A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A0A0A; --surface:#161616; --ink:#F4F4F2; --ink-2:#A6A6A6; --ink-3:#6E6E70;
+  --line:#F4F4F2; --line-2:#2E2E2E; --on-ink:#0A0A0A;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--ff-b); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+
+.wrap{max-width:1180px; margin:0 auto; padding:0 30px}
+
+/* ══ Hero ══════════════════════════════════════════════════ */
+.top{padding:56px 0 0; display:flex; align-items:center; gap:11px}
+.logo{width:15px; height:26px; background:var(--c1); flex:0 0 auto}
+.top b{font-family:var(--ff-d); font-weight:800; font-size:15px; letter-spacing:.16em; text-transform:uppercase}
+
+.hero{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:56px; align-items:end; padding:36px 0 64px}
+.hero h1{
+  font-family:var(--ff-d); font-weight:900; font-variation-settings:"wdth" 112;
+  font-size:clamp(56px,10.5vw,132px); line-height:.86; letter-spacing:-.045em;
+  margin:0 0 26px; text-transform:uppercase;
+}
+.hero h1 em{font-style:normal; color:var(--c1)}
+.hero p{margin:0; font-size:17px; color:var(--ink-2); max-width:50ch}
+.hero .marks{display:flex; flex-wrap:wrap; gap:0; margin-top:26px; border-top:2px solid var(--line)}
+.mark{
+  padding:11px 18px 11px 0; margin-right:18px;
+  font-family:var(--ff-d); font-weight:700; font-size:11px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-2);
+}
+
+/* ══ Full-bleed statement band ═════════════════════════════ */
+.band{background:var(--c1); color:#fff; padding:74px 0}
+.band .wrap{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:56px; align-items:start}
+.band h2{
+  font-family:var(--ff-d); font-weight:900; font-variation-settings:"wdth" 108;
+  font-size:clamp(30px,4.4vw,54px); line-height:.94; letter-spacing:-.035em;
+  margin:0; text-transform:uppercase; text-wrap:balance;
+}
+.band p{margin:0 0 18px; font-size:16.5px; color:rgba(255,255,255,.86); max-width:52ch}
+.band p:last-child{margin-bottom:0}
+.band strong{color:#fff; font-weight:600}
+
+/* ══ Sections ══════════════════════════════════════════════ */
+.sec{padding:82px 0}
+.sec-h{margin-bottom:38px; max-width:62ch}
+.tagline{
+  font-family:var(--ff-d); font-weight:700; font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--c1); margin-bottom:12px;
+}
+.sec-h h2{
+  font-family:var(--ff-d); font-weight:800; font-variation-settings:"wdth" 105;
+  font-size:clamp(28px,3.6vw,42px); line-height:1; letter-spacing:-.035em;
+  margin:0 0 12px; text-transform:uppercase; text-wrap:balance;
+}
+.sec-h p{margin:0; color:var(--ink-2); font-size:16px}
+
+/* ══ Ink specimen ══════════════════════════════════════════ */
+.inks{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:0; border:2px solid var(--line)}
+.ink-cell{padding:0; border-right:2px solid var(--line); display:flex; flex-direction:column}
+.ink-cell:last-child{border-right:none}
+.ink-chip{height:112px}
+.ink-meta{padding:14px 15px 16px; display:flex; flex-direction:column; gap:3px}
+.ink-meta b{font-family:var(--ff-d); font-weight:800; font-size:12.5px; letter-spacing:.06em}
+.ink-meta span{font-size:12.5px; color:var(--ink-2)}
+
+.typerow{display:grid; grid-template-columns:1fr 1fr; gap:0; border:2px solid var(--line); border-top:none}
+.tcell{padding:26px 24px 28px; border-right:2px solid var(--line)}
+.tcell:last-child{border-right:none}
+.tcell .demo{font-family:var(--ff-d); font-weight:900; font-variation-settings:"wdth" 112; font-size:46px; line-height:1; letter-spacing:-.04em}
+.tcell .demo-b{font-family:var(--ff-b); font-weight:600; font-size:22px; letter-spacing:-.01em}
+.tcell p{margin:14px 0 0; font-size:13.5px; color:var(--ink-2); line-height:1.5}
+.tcell p b{color:var(--ink); font-weight:700}
+
+/* ══ Phones ════════════════════════════════════════════════ */
+.grid{display:grid; gap:56px 32px; grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.cell{display:flex; flex-direction:column}
+.cap{border-top:2px solid var(--line); padding-top:13px; margin-top:18px}
+.cap b{display:block; font-family:var(--ff-d); font-weight:800; font-size:13px; letter-spacing:.09em; text-transform:uppercase}
+.cap span{display:block; font-size:13px; color:var(--ink-2); line-height:1.5; margin-top:5px}
+
+.ph{width:300px; height:650px; border-radius:42px; padding:7px; background:var(--ink); margin:0 auto}
+.scr{
+  width:100%; height:100%; border-radius:36px; overflow:hidden;
+  background:var(--bg); display:flex; flex-direction:column;
+}
+.stat{
+  display:flex; justify-content:space-between; align-items:center; flex:0 0 auto;
+  padding:13px 22px 7px; font-size:11.5px; font-weight:600; font-variant-numeric:tabular-nums;
+}
+.stat .rx{display:flex; gap:2.5px; align-items:flex-end}
+.stat .rx i{width:3px; background:currentColor; border-radius:.5px}
+.stat .rx i:nth-child(1){height:5px} .stat .rx i:nth-child(2){height:7px}
+.stat .rx i:nth-child(3){height:9px} .stat .rx i:nth-child(4){height:11px}
+.stat .bt{width:21px; height:10.5px; border:1.5px solid currentColor; border-radius:2.5px; position:relative}
+.stat .bt::after{content:""; position:absolute; inset:1.5px; right:6px; background:currentColor}
+
+/* ── THE SIGNATURE: the column that fills ─────────────────── */
+.col{flex:1 1 auto; display:flex; flex-direction:column; overflow:hidden}
+
+.void{
+  flex:652.6 1 0; min-height:118px; padding:16px 20px 12px;
+  display:flex; flex-direction:column; justify-content:flex-end; gap:2px; overflow:hidden;
+}
+.col.fills .void{flex-grow:652.6}
+.lbl{font-family:var(--ff-d); font-weight:700; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-3)}
+.big{
+  font-family:var(--ff-d); font-weight:900; font-variation-settings:"wdth" 108;
+  font-size:44px; line-height:.92; letter-spacing:-.045em; font-variant-numeric:tabular-nums;
+}
+.big sup{font-size:.42em; font-weight:700; vertical-align:.76em; margin-left:.08em; color:var(--ink-2)}
+.void .note{font-size:11.5px; color:var(--ink-2); margin-top:3px}
+
+.keep{
+  flex:500 1 0; min-height:52px; margin:0 12px; padding:11px 13px;
+  border:2px solid var(--line); display:flex; align-items:center;
+  justify-content:space-between; gap:10px; overflow:hidden;
+}
+.keep b{font-family:var(--ff-d); font-weight:800; font-size:11px; letter-spacing:.11em; text-transform:uppercase}
+.keep span{font-family:var(--ff-d); font-weight:800; font-size:14px; font-variant-numeric:tabular-nums; white-space:nowrap}
+
+.level{
+  flex:0 0 auto; margin:12px 12px 0; padding:0 1px 7px;
+  border-bottom:3px solid var(--line);
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+}
+.level b{font-family:var(--ff-d); font-weight:800; font-size:10px; letter-spacing:.16em; text-transform:uppercase}
+.level span{font-family:var(--ff-d); font-weight:900; font-size:16px; font-variant-numeric:tabular-nums; letter-spacing:-.02em}
+
+.seg{
+  flex:1 1 0; min-height:26px; margin:0 12px; padding:0 13px;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:var(--c); color:#fff; overflow:hidden;
+}
+.seg + .seg{margin-top:3px}
+.seg b{font-family:var(--ff-d); font-weight:800; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.seg span{font-family:var(--ff-d); font-weight:800; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap}
+.seg.dark-ink{color:#0A0A0A}
+.seg:last-child{margin-bottom:12px}
+
+/* ── Bottom bar: solid, flat, no chrome ───────────────────── */
+.nav{
+  flex:0 0 auto; background:var(--ink); color:var(--on-ink);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:13px 20px 20px;
+}
+.nv{font-family:var(--ff-d); font-weight:700; font-size:10px; letter-spacing:.13em; text-transform:uppercase; opacity:.45}
+.nv.on{opacity:1}
+.add{width:34px; height:34px; background:var(--c1); color:#fff; display:grid; place-items:center; font-size:20px; font-weight:400; line-height:1}
+
+/* ── Generic screen scaffolding ───────────────────────────── */
+.body{flex:1 1 auto; overflow:hidden; display:flex; flex-direction:column}
+.head{padding:12px 20px 14px; border-bottom:2px solid var(--line)}
+.head .lbl{margin-bottom:4px}
+.head h4{font-family:var(--ff-d); font-weight:900; font-size:25px; letter-spacing:-.035em; margin:0; text-transform:uppercase}
+
+/* Ledger */
+.day{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:9px 20px 5px; font-family:var(--ff-d); font-weight:700;
+  font-size:9.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-3);
+}
+.tx{display:flex; align-items:center; gap:11px; padding:9px 20px; border-bottom:1px solid var(--line-2)}
+.dot{width:11px; height:11px; flex:0 0 auto; background:var(--c)}
+.tx-t{flex:1 1 auto; min-width:0}
+.tx-t b{display:block; font-size:12.5px; font-weight:600; letter-spacing:-.005em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.tx-t span{display:block; font-size:10px; color:var(--ink-3)}
+.tx-v{font-family:var(--ff-d); font-weight:700; font-size:12.5px; font-variant-numeric:tabular-nums; white-space:nowrap}
+.tx-v.in{color:var(--c4)}
+
+/* Breakdown rows */
+.brk{padding:14px 20px 16px; display:flex; flex-direction:column; gap:13px}
+.br{display:flex; flex-direction:column; gap:5px}
+.br-t{display:flex; justify-content:space-between; align-items:baseline; gap:10px}
+.br-t b{font-size:12px; font-weight:600}
+.br-t span{font-family:var(--ff-d); font-weight:700; font-size:11.5px; font-variant-numeric:tabular-nums; color:var(--ink-2)}
+.br-b{height:9px; background:var(--line-2)}
+.br-b i{display:block; height:100%; width:var(--w); background:var(--c)}
+
+/* Add screen — full-bleed ink */
+.scr.blue{background:var(--c1); color:#fff}
+.scr.blue .stat{color:#fff}
+.entry{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; padding:0 22px; gap:6px}
+.entry .lbl{color:rgba(255,255,255,.62)}
+.entry .amt{
+  font-family:var(--ff-d); font-weight:900; font-variation-settings:"wdth" 108;
+  font-size:64px; line-height:.9; letter-spacing:-.05em; font-variant-numeric:tabular-nums;
+  display:flex; align-items:baseline; gap:4px;
+}
+.entry .amt u{text-decoration:none; width:3px; height:52px; background:#fff; animation:cur 1.05s steps(1) infinite}
+@keyframes cur{50%{opacity:0}}
+.entry .amt s{text-decoration:none; font-size:.44em; font-weight:700; color:rgba(255,255,255,.66)}
+.chips{display:flex; flex-wrap:wrap; gap:6px; padding:0 22px 14px}
+.chip{font-family:var(--ff-d); font-weight:700; font-size:10px; letter-spacing:.08em; text-transform:uppercase; padding:7px 11px; border:1.5px solid rgba(255,255,255,.45); color:rgba(255,255,255,.8)}
+.chip.on{background:#fff; color:var(--c1); border-color:#fff}
+.keys{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,.22); flex:0 0 auto}
+.keys b{font-family:var(--ff-d); font-weight:700; font-size:21px; text-align:center; padding:13px 0; background:var(--c1); color:#fff}
+.save{
+  flex:0 0 auto; background:#fff; color:var(--c1); text-align:center; padding:19px;
+  font-family:var(--ff-d); font-weight:900; font-size:15px; letter-spacing:.1em; text-transform:uppercase;
+}
+
+/* Recurring */
+.due{display:flex; align-items:center; gap:12px; padding:11px 20px; border-bottom:1px solid var(--line-2)}
+.dd{width:36px; flex:0 0 auto; font-family:var(--ff-d); line-height:1.1; text-align:center}
+.dd b{display:block; font-weight:900; font-size:15px; letter-spacing:-.02em}
+.dd span{display:block; font-weight:700; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+.due.soon .dd{background:var(--warn); color:#0A0A0A; padding:3px 0}
+.due.soon .dd span{color:rgba(10,10,10,.62)}
+.due.done{opacity:.4}
+.due-t{flex:1 1 auto; min-width:0}
+.due-t b{display:block; font-size:12.5px; font-weight:600}
+.due-t span{display:block; font-size:10px; color:var(--ink-3)}
+
+/* Comparison */
+.cmp{padding:20px 20px 16px; display:flex; flex-direction:column; gap:16px}
+.bars{display:flex; align-items:flex-end; gap:8px; height:138px}
+.bc{flex:1; display:flex; flex-direction:column; justify-content:flex-end; gap:6px; height:100%}
+.bc .bb{height:var(--h); border:2px solid var(--line)}
+.bc.now .bb{background:var(--c1); border-color:var(--c1)}
+.bc .bl{font-family:var(--ff-d); font-weight:700; font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; text-align:center; color:var(--ink-3)}
+.bc.now .bl{color:var(--c1)}
+.delta{border-top:3px solid var(--line); padding-top:12px; display:flex; align-items:baseline; gap:12px}
+.delta b{font-family:var(--ff-d); font-weight:900; font-size:30px; letter-spacing:-.04em; color:var(--c4)}
+.delta span{font-size:11.5px; color:var(--ink-2); line-height:1.4}
+
+.tip{margin:0 20px 16px; border:2px solid var(--line); padding:12px 14px; font-size:11.5px; line-height:1.45; color:var(--ink-2)}
+.tip b{color:var(--ink); font-weight:700}
+
+/* Empty */
+.blank{flex:1 1 auto; display:flex; flex-direction:column; justify-content:flex-end; padding:26px 22px 22px; gap:16px}
+.blank h3{
+  font-family:var(--ff-d); font-weight:900; font-variation-settings:"wdth" 108;
+  font-size:38px; line-height:.9; letter-spacing:-.045em; margin:0; text-transform:uppercase;
+}
+.blank p{margin:0; font-size:13px; color:var(--ink-2); max-width:30ch; line-height:1.5}
+.cta{background:var(--c1); color:#fff; text-align:center; padding:17px; font-family:var(--ff-d); font-weight:900; font-size:13px; letter-spacing:.12em; text-transform:uppercase}
+.alts{display:flex; flex-direction:column; gap:0; border-top:2px solid var(--line)}
+.alt{padding:11px 0; border-bottom:1px solid var(--line-2); font-size:11.5px; color:var(--ink-2)}
+.alt:last-child{border-bottom:none}
+
+/* Dark app variant */
+.scr.night{background:#0A0A0A; color:#F4F4F2}
+.scr.night .lbl,.scr.night .dd span{color:#77777C}
+.scr.night .void .note{color:#A6A6A6}
+.scr.night .keep,.scr.night .level{border-color:#F4F4F2}
+.scr.night .nav{background:#F4F4F2; color:#0A0A0A}
+
+/* ══ Ecosystem ═════════════════════════════════════════════ */
+.eco{display:flex; flex-wrap:wrap; gap:44px; align-items:flex-start}
+.eu{display:flex; flex-direction:column; gap:0}
+.eu .cap{max-width:23ch}
+.watch{width:152px; height:184px; border-radius:44px; padding:7px; background:var(--ink)}
+.wf{width:100%; height:100%; border-radius:38px; background:#0A0A0A; color:#fff; overflow:hidden; display:flex; flex-direction:column}
+.wf .wtop{padding:13px 13px 8px; flex:0 0 auto}
+.wf .wtop .lbl{color:#77777C; font-size:8.5px}
+.wf .wtop .big{font-size:27px; margin-top:3px}
+.wcol{flex:1 1 auto; display:flex; flex-direction:column; padding:0 9px 9px; gap:2px}
+.wcol i{display:block; background:var(--c)}
+.wcol i.gap{background:none; border:1.5px solid #3A3A3A}
+
+.tile{width:228px; height:228px; background:var(--bg); border:2px solid var(--line); display:flex; flex-direction:column}
+.tile .thead{padding:15px 15px 11px}
+.tile .thead .big{font-size:30px}
+.tcol{flex:1 1 auto; display:flex; flex-direction:column; padding:0 15px 15px; gap:2px}
+.tcol i{display:block; background:var(--c)}
+.tcol i.gap{background:none; border:1.5px solid var(--line-2)}
+
+.lock{width:278px; background:#0A0A0A; color:#fff; padding:22px 18px; display:flex; flex-direction:column; gap:18px}
+.lock .clk{font-family:var(--ff-d); font-weight:900; font-variation-settings:"wdth" 108; font-size:58px; line-height:.9; letter-spacing:-.05em; text-align:center}
+.lock .dte{font-size:11.5px; color:#A6A6A6; text-align:center; margin-top:-10px}
+.lockw{border:2px solid #F4F4F2; padding:12px 13px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+.lockw .lbl{color:#77777C}
+.lockw .big{font-size:19px}
+.lstrip{display:flex; flex-direction:column; gap:2px; width:34px; height:44px; flex:0 0 auto}
+.lstrip i{display:block; background:var(--c)}
+.lstrip i.gap{background:none; border:1.5px solid #3A3A3A}
+
+/* ══ Tech ══════════════════════════════════════════════════ */
+.tech{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:0 40px}
+.tg{padding:24px 0 26px; border-top:2px solid var(--line)}
+.tg h3{font-family:var(--ff-d); font-weight:900; font-size:14px; letter-spacing:.09em; text-transform:uppercase; margin:0 0 15px}
+.tg ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px}
+.tg li{display:flex; flex-direction:column; gap:2px}
+.tg li b{font-family:var(--ff-d); font-weight:700; font-size:12.5px; letter-spacing:-.005em}
+.tg li span{font-size:12.5px; color:var(--ink-2); line-height:1.5}
+
+.decide{margin-top:32px; background:var(--ink); color:var(--on-ink); padding:30px 32px}
+.decide h3{font-family:var(--ff-d); font-weight:900; font-size:20px; letter-spacing:-.02em; margin:0 0 10px; text-transform:uppercase}
+.decide p{margin:0; font-size:14px; line-height:1.6; max-width:76ch; opacity:.82}
+.decide code{font-family:ui-monospace,"SF Mono",monospace; font-size:12.5px; background:rgba(128,128,128,.3); padding:1px 6px; white-space:nowrap}
+
+.fin{border-top:2px solid var(--line); padding:24px 0 90px; font-size:12.5px; color:var(--ink-3); max-width:74ch; line-height:1.65}
+
+:focus-visible{outline:3px solid var(--c1); outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
+@media (max-width:940px){
+  .hero{grid-template-columns:1fr; gap:44px; align-items:start}
+  .band .wrap{grid-template-columns:1fr; gap:28px}
+  .typerow{grid-template-columns:1fr}
+  .tcell{border-right:none; border-bottom:2px solid var(--line)}
+  .tcell:last-child{border-bottom:none}
+}
+@media (max-width:640px){
+  .wrap{padding:0 18px}
+  .grid{grid-template-columns:1fr}
+  .inks{grid-template-columns:1fr 1fr}
+  .ink-cell{border-bottom:2px solid var(--line)}
+}
+</style>
+
+<div class="wrap">
+  <div class="top"><span class="logo" aria-hidden="true"></span><b>Invexa</b></div>
+
+  <header class="hero">
+    <div>
+      <h1>Къде<br>отидоха<br><em>парите?</em></h1>
+      <p>Мокъпи за iPhone, Apple&nbsp;Watch и виджети на тракер за месечни разходи. Един екран отговаря на въпроса, без да го задаваш. Данните са примерни: август&nbsp;2026, евро.</p>
+      <div class="marks">
+        <span class="mark">8 екрана</span>
+        <span class="mark">Плоско · без ефекти</span>
+        <span class="mark">Светло и тъмно</span>
+        <span class="mark">Без Trading 212 засега</span>
+      </div>
+    </div>
+
+    <!-- Home screen -->
+    <div class="ph"><div class="scr">
+      <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+      <div class="col fills" id="hero-col">
+        <div class="void">
+          <span class="lbl">Остават</span>
+          <span class="big">652<sup>,60 €</sup></span>
+          <span class="note">от 2 340 € приход · 10 дни до края</span>
+        </div>
+        <div class="keep"><b>Заделени</b><span>500,00 €</span></div>
+        <div class="level"><b>Похарчено за 21 дни</b><span>1 187,40 €</span></div>
+        <div class="seg" style="--c:var(--c1); flex-grow:312.8"><b>Хранителни стоки</b><span>312,80</span></div>
+        <div class="seg" style="--c:var(--c2); flex-grow:280"><b>Жилище</b><span>280,00</span></div>
+        <div class="seg" style="--c:var(--c3); flex-grow:168.5"><b>Заведения</b><span>168,50</span></div>
+        <div class="seg" style="--c:var(--c4); flex-grow:124.9"><b>Транспорт</b><span>124,90</span></div>
+        <div class="seg dark-ink" style="--c:var(--c6); flex-grow:301.2"><b>Останали 4</b><span>301,20</span></div>
+      </div>
+      <div class="nav"><span class="nv on">Месец</span><span class="nv">Дневник</span><span class="add" aria-hidden="true">+</span><span class="nv">Повтарящи</span></div>
+    </div></div>
+  </header>
+</div>
+
+<!-- ══ Statement band ══════════════════════════════════════ -->
+<section class="band">
+  <div class="wrap">
+    <h2>Екранът се пълни, докато харчиш</h2>
+    <div>
+      <p>Колоната е целият месец. Празното отгоре са парите, които още имаш. Дебелата черта е нивото — колко е излязло. Плътните блокове отдолу показват къде, а големината им е реалният им дял.</p>
+      <p><strong>Заделените пари са блок с контур, не запълнен.</strong> Те не са похарчени — още са твои. Повечето прости тракери ги смятат за разход и точно затова показват грешна картина.</p>
+      <p>Няма карти, няма рамки около рамки, няма графики, скрити в панели. Има един обект и той казва всичко.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ══ Inks ══════════════════════════════════════════════ -->
+  <section class="sec">
+    <div class="sec-h">
+      <div class="tagline">Мастилата</div>
+      <h2>Плоски цветове, нула дълбочина</h2>
+      <p>Ситопечатни мастила: наситени, без преливки, без прозрачност. Всяка категория държи своя цвят навсякъде в приложението — в колоната, в дневника, в разбивката — така че цветът се научава веднъж и после работи вместо етикет.</p>
+    </div>
+
+    <div class="inks">
+      <div class="ink-cell"><div class="ink-chip" style="background:#0A2BFF"></div><div class="ink-meta"><b>#0A2BFF</b><span>Хранителни стоки · действия</span></div></div>
+      <div class="ink-cell"><div class="ink-chip" style="background:#7A5AF8"></div><div class="ink-meta"><b>#7A5AF8</b><span>Жилище</span></div></div>
+      <div class="ink-cell"><div class="ink-chip" style="background:#FF3D9A"></div><div class="ink-meta"><b>#FF3D9A</b><span>Заведения</span></div></div>
+      <div class="ink-cell"><div class="ink-chip" style="background:#00B26A"></div><div class="ink-meta"><b>#00B26A</b><span>Транспорт · приходи</span></div></div>
+      <div class="ink-cell"><div class="ink-chip" style="background:#FFE500"></div><div class="ink-meta"><b>#FFE500</b><span>Сметки · предстоящи</span></div></div>
+      <div class="ink-cell"><div class="ink-chip" style="background:#00C2D4"></div><div class="ink-meta"><b>#00C2D4</b><span>Останалите категории</span></div></div>
+    </div>
+
+    <div class="typerow">
+      <div class="tcell">
+        <div class="demo">1 187,40 €</div>
+        <p><b>Archivo</b> — променлив шрифт. Тежест 900 и разширение 108 за сумите и заглавията. Цифрите са табулярни, за да не подскачат при промяна.</p>
+      </div>
+      <div class="tcell">
+        <div class="demo-b">Хранителни стоки · Заведения</div>
+        <p><b>Instrument Sans</b> — интерфейсът и текстовете. Две семейства стигат: чистотата идва от дисциплината в тежестите, не от трети шрифт.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ Screens ═══════════════════════════════════════════ -->
+  <section class="sec">
+    <div class="sec-h">
+      <div class="tagline">Екрани</div>
+      <h2>Осем екрана, нула украса</h2>
+      <p>Всеки екран е списък, блок или колона. Няма нито една сянка, нито едно размиване, нито един градиент в целия комплект.</p>
+    </div>
+
+    <div class="grid">
+
+      <!-- Add -->
+      <div class="cell">
+        <div class="ph"><div class="scr blue">
+          <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+          <div class="entry">
+            <span class="lbl">Нов разход</span>
+            <span class="amt">34,20<u></u><s>€</s></span>
+          </div>
+          <div class="chips">
+            <span class="chip on">Хранителни</span><span class="chip">Заведения</span>
+            <span class="chip">Транспорт</span><span class="chip">Сметки</span>
+          </div>
+          <div class="keys"><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b><b>,</b><b>0</b><b>⌫</b></div>
+          <div class="save">Запиши</div>
+        </div></div>
+        <div class="cap"><b>Нов разход</b><span>Целият екран е един цвят и едно число. Отваря се на клавиатурата, с последната категория избрана — три докосвания до записан разход.</span></div>
+      </div>
+
+      <!-- Ledger -->
+      <div class="cell">
+        <div class="ph"><div class="scr">
+          <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+          <div class="body">
+            <div class="head"><div class="lbl">Август 2026</div><h4>Дневник</h4></div>
+            <div class="day"><span>Четвъртък 21 август</span><span>41,00 €</span></div>
+            <div class="tx"><span class="dot" style="--c:var(--c1)"></span><span class="tx-t"><b>Лидл</b><span>Хранителни стоки</span></span><span class="tx-v">−34,20</span></div>
+            <div class="tx"><span class="dot" style="--c:var(--c4)"></span><span class="tx-t"><b>Bolt</b><span>Транспорт</span></span><span class="tx-v">−6,80</span></div>
+            <div class="day"><span>Сряда 20 август</span><span>23,49 €</span></div>
+            <div class="tx"><span class="dot" style="--c:var(--c3)"></span><span class="tx-t"><b>Кафе Ателие</b><span>Заведения</span></span><span class="tx-v">−4,50</span></div>
+            <div class="tx"><span class="dot" style="--c:var(--c5)"></span><span class="tx-t"><b>Виваком</b><span>Сметки · повтарящ се</span></span><span class="tx-v">−18,99</span></div>
+            <div class="day"><span>Вторник 19 август</span><span>62,29 €</span></div>
+            <div class="tx"><span class="dot" style="--c:var(--c1)"></span><span class="tx-t"><b>Фантастико</b><span>Хранителни стоки</span></span><span class="tx-v">−51,30</span></div>
+            <div class="day"><span>Понеделник 18 август</span><span>+1 170,00 €</span></div>
+            <div class="tx"><span class="dot" style="--c:var(--c4)"></span><span class="tx-t"><b>Заплата</b><span>Приход</span></span><span class="tx-v in">+1 170,00</span></div>
+          </div>
+          <div class="nav"><span class="nv">Месец</span><span class="nv on">Дневник</span><span class="add" aria-hidden="true">+</span><span class="nv">Повтарящи</span></div>
+        </div></div>
+        <div class="cap"><b>Дневник</b><span>Квадратчето отляво носи цвета на категорията. Без икони — цветът вече е научен от колоната.</span></div>
+      </div>
+
+      <!-- Breakdown -->
+      <div class="cell">
+        <div class="ph"><div class="scr">
+          <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+          <div class="body">
+            <div class="head"><div class="lbl">Август · 21 от 31 дни</div><h4>Разбивка</h4></div>
+            <div class="brk">
+              <div class="br"><div class="br-t"><b>Хранителни стоки</b><span>312,80 · 26%</span></div><div class="br-b"><i style="--c:var(--c1); --w:100%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Жилище</b><span>280,00 · 24%</span></div><div class="br-b"><i style="--c:var(--c2); --w:89%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Заведения</b><span>168,50 · 14%</span></div><div class="br-b"><i style="--c:var(--c3); --w:54%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Транспорт</b><span>124,90 · 11%</span></div><div class="br-b"><i style="--c:var(--c4); --w:40%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Сметки</b><span>96,40 · 8%</span></div><div class="br-b"><i style="--c:var(--c5); --w:31%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Пазаруване</b><span>88,20 · 7%</span></div><div class="br-b"><i style="--c:var(--c6); --w:28%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Развлечения</b><span>61,60 · 5%</span></div><div class="br-b"><i style="--c:var(--c6); --w:20%"></i></div></div>
+            </div>
+            <div class="tip">Заведенията са с <b>48 € повече</b> от средното ти за последните три месеца.</div>
+          </div>
+          <div class="nav"><span class="nv on">Месец</span><span class="nv">Дневник</span><span class="add" aria-hidden="true">+</span><span class="nv">Повтарящи</span></div>
+        </div></div>
+        <div class="cap"><b>Разбивка</b><span>Точните числа, когато колоната не стига. Подредба по големина, всяка лента спрямо най-голямата.</span></div>
+      </div>
+
+      <!-- Recurring -->
+      <div class="cell">
+        <div class="ph"><div class="scr">
+          <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+          <div class="body">
+            <div class="head"><div class="lbl">Абонаменти и сметки</div><h4>Повтарящи се</h4></div>
+            <div style="display:flex; border-bottom:2px solid var(--line)">
+              <div style="flex:1; padding:14px 20px; border-right:2px solid var(--line)"><div class="lbl">Месечно</div><div class="big" style="font-size:24px; margin-top:4px">366,36</div></div>
+              <div style="flex:1; padding:14px 20px"><div class="lbl">Предстоят</div><div class="big" style="font-size:24px; margin-top:4px; color:var(--c1)">47,38</div></div>
+            </div>
+            <div class="due soon"><span class="dd"><b>24</b><span>авг</span></span><span class="due-t"><b>Netflix</b><span>след 3 дни · Развлечения</span></span><span class="tx-v">12,99</span></div>
+            <div class="due soon"><span class="dd"><b>26</b><span>авг</span></span><span class="due-t"><b>iCloud+</b><span>след 5 дни · Абонаменти</span></span><span class="tx-v">2,99</span></div>
+            <div class="due soon"><span class="dd"><b>28</b><span>авг</span></span><span class="due-t"><b>Топлофикация</b><span>след 7 дни · Сметки</span></span><span class="tx-v">31,40</span></div>
+            <div class="due"><span class="dd"><b>01</b><span>сеп</span></span><span class="due-t"><b>Наем</b><span>следващ месец · Жилище</span></span><span class="tx-v">280,00</span></div>
+            <div class="due"><span class="dd"><b>01</b><span>сеп</span></span><span class="due-t"><b>Фитнес</b><span>следващ месец · Здраве</span></span><span class="tx-v">29,00</span></div>
+            <div class="due done"><span class="dd"><b>19</b><span>авг</span></span><span class="due-t"><b>Spotify</b><span>платен · Развлечения</span></span><span class="tx-v">10,99</span></div>
+          </div>
+          <div class="nav"><span class="nv">Месец</span><span class="nv">Дневник</span><span class="add" aria-hidden="true">+</span><span class="nv on">Повтарящи</span></div>
+        </div></div>
+        <div class="cap"><b>Повтарящи се</b><span>Жълтото маркира само това, което идва в следващите седем дни. Платените избледняват, за да остане месечната сума проверима.</span></div>
+      </div>
+
+      <!-- Comparison -->
+      <div class="cell">
+        <div class="ph"><div class="scr">
+          <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+          <div class="body">
+            <div class="head"><div class="lbl">Последни шест месеца</div><h4>Месец до месец</h4></div>
+            <div class="cmp">
+              <div class="bars">
+                <div class="bc"><span class="bb" style="--h:76%"></span><span class="bl">Мар</span></div>
+                <div class="bc"><span class="bb" style="--h:88%"></span><span class="bl">Апр</span></div>
+                <div class="bc"><span class="bb" style="--h:72%"></span><span class="bl">Май</span></div>
+                <div class="bc"><span class="bb" style="--h:80%"></span><span class="bl">Юни</span></div>
+                <div class="bc"><span class="bb" style="--h:72%"></span><span class="bl">Юли</span></div>
+                <div class="bc now"><span class="bb" style="--h:67%"></span><span class="bl">Авг</span></div>
+              </div>
+              <div class="delta"><b>−81 €</b><span>под юли на същия ден от месеца. Средно за шест месеца: 1&nbsp;329&nbsp;€.</span></div>
+            </div>
+            <div class="brk" style="padding-top:2px">
+              <div class="br"><div class="br-t"><b>Заведения</b><span style="color:var(--c3)">+48,20 €</span></div><div class="br-b"><i style="--c:var(--c3); --w:62%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Транспорт</b><span style="color:var(--c4)">−36,10 €</span></div><div class="br-b"><i style="--c:var(--c4); --w:46%"></i></div></div>
+              <div class="br"><div class="br-t"><b>Пазаруване</b><span style="color:var(--c4)">−94,40 €</span></div><div class="br-b"><i style="--c:var(--c4); --w:100%"></i></div></div>
+            </div>
+          </div>
+          <div class="nav"><span class="nv on">Месец</span><span class="nv">Дневник</span><span class="add" aria-hidden="true">+</span><span class="nv">Повтарящи</span></div>
+        </div></div>
+        <div class="cap"><b>Месец до месец</b><span>Сравнява текущия месец в същия ден, а не пълен срещу непълен — иначе числото винаги лъже в твоя полза.</span></div>
+      </div>
+
+      <!-- Empty -->
+      <div class="cell">
+        <div class="ph"><div class="scr">
+          <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+          <div class="blank">
+            <h3>Август<br>е празен</h3>
+            <p>Запиши първия разход. Отнема три секунди и колоната започва да се пълни.</p>
+            <div class="cta">Запиши разход</div>
+            <div class="alts">
+              <div class="alt">Внеси извлечение от банката като CSV файл</div>
+              <div class="alt">Кажи на Siri „добави 12 евро обяд“</div>
+              <div class="alt">Снимай касова бележка</div>
+            </div>
+          </div>
+          <div class="nav"><span class="nv on">Месец</span><span class="nv">Дневник</span><span class="add" aria-hidden="true">+</span><span class="nv">Повтарящи</span></div>
+        </div></div>
+        <div class="cap"><b>Първо отваряне</b><span>Празният екран е покана, не извинение. Празнотата отгоре е точно това, което ще се напълни — метафората работи и от нула.</span></div>
+      </div>
+
+      <!-- Dark -->
+      <div class="cell">
+        <div class="ph"><div class="scr night">
+          <div class="stat"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><span class="rx"><i></i><i></i><i></i><i></i></span><span class="bt"></span></span></div>
+          <div class="col">
+            <div class="void">
+              <span class="lbl">Остават</span>
+              <span class="big">652<sup style="color:#A6A6A6">,60 €</sup></span>
+              <span class="note">от 2 340 € приход · 10 дни до края</span>
+            </div>
+            <div class="keep"><b>Заделени</b><span>500,00 €</span></div>
+            <div class="level"><b>Похарчено за 21 дни</b><span>1 187,40 €</span></div>
+            <div class="seg" style="--c:var(--c1); flex-grow:312.8"><b>Хранителни стоки</b><span>312,80</span></div>
+            <div class="seg" style="--c:var(--c2); flex-grow:280"><b>Жилище</b><span>280,00</span></div>
+            <div class="seg" style="--c:var(--c3); flex-grow:168.5"><b>Заведения</b><span>168,50</span></div>
+            <div class="seg" style="--c:var(--c4); flex-grow:124.9"><b>Транспорт</b><span>124,90</span></div>
+            <div class="seg dark-ink" style="--c:var(--c6); flex-grow:301.2"><b>Останали 4</b><span>301,20</span></div>
+          </div>
+          <div class="nav"><span class="nv on">Месец</span><span class="nv">Дневник</span><span class="add" aria-hidden="true">+</span><span class="nv">Повтарящи</span></div>
+        </div></div>
+        <div class="cap"><b>Тъмен режим</b><span>Мастилата не се променят — те са достатъчно наситени и за двата фона. Обръщат се само хартията и черното.</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ Ecosystem ═════════════════════════════════════════ -->
+  <section class="sec">
+    <div class="sec-h">
+      <div class="tagline">Извън приложението</div>
+      <h2>Колоната се свива до лента</h2>
+      <p>На 40 милиметра етикетите отпадат, но пропорциите остават. Точно това прави колоната по-добра от диаграма — тя не се нуждае от текст, за да е вярна.</p>
+    </div>
+
+    <div class="eco">
+      <div class="eu">
+        <div class="watch"><div class="wf">
+          <div class="wtop"><div class="lbl">Остават · август</div><div class="big">652 €</div></div>
+          <div class="wcol">
+            <i class="gap" style="flex:652.6"></i>
+            <i style="--c:var(--c1); flex:312.8"></i>
+            <i style="--c:var(--c2); flex:280"></i>
+            <i style="--c:var(--c3); flex:168.5"></i>
+            <i style="--c:var(--c4); flex:124.9"></i>
+            <i style="--c:var(--c6); flex:301.2"></i>
+          </div>
+        </div></div>
+        <div class="cap"><b>Apple Watch</b><span>Вдигаш китката: колко празно е останало отгоре.</span></div>
+      </div>
+
+      <div class="eu">
+        <div class="tile">
+          <div class="thead"><div class="lbl">Остават · август</div><div class="big">652<sup>,60 €</sup></div></div>
+          <div class="tcol">
+            <i class="gap" style="flex:652.6"></i>
+            <i style="--c:var(--c1); flex:312.8"></i>
+            <i style="--c:var(--c2); flex:280"></i>
+            <i style="--c:var(--c3); flex:168.5"></i>
+            <i style="--c:var(--c4); flex:124.9"></i>
+            <i style="--c:var(--c6); flex:301.2"></i>
+          </div>
+        </div>
+        <div class="cap"><b>Начален екран</b><span>Среден виджет. Докосването отваря записа на разход.</span></div>
+      </div>
+
+      <div class="eu">
+        <div class="lock">
+          <div><div class="clk">9:41</div><div class="dte">петък, 22 август</div></div>
+          <div class="lockw">
+            <span class="lstrip">
+              <i class="gap" style="flex:652.6"></i>
+              <i style="--c:var(--c1); flex:312.8"></i>
+              <i style="--c:var(--c2); flex:280"></i>
+              <i style="--c:var(--c3); flex:168.5"></i>
+              <i style="--c:var(--c6); flex:426.1"></i>
+            </span>
+            <span style="flex:1; text-align:right"><span class="lbl" style="display:block">Остават</span><span class="big" style="display:block; margin-top:2px">652,60 €</span></span>
+          </div>
+        </div>
+        <div class="cap"><b>Заключен екран</b><span>Числото, което искаш, без да отключваш телефона.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ Tech ══════════════════════════════════════════════ -->
+  <section class="sec">
+    <div class="sec-h">
+      <div class="tagline">Технологии</div>
+      <h2>Какво е нужно, за да се построи</h2>
+      <p>Обхватът е тракер за месечни разходи — ръчно въвеждане, категории, повтарящи се плащания, сравнение. Без банкова синхронизация и без Trading&nbsp;212 засега. Всичко се побира в едно Xcode решение, без нито един сървър.</p>
+    </div>
+
+    <div class="tech">
+      <div class="tg">
+        <h3>Основа</h3>
+        <ul>
+          <li><b>Swift 6 · Xcode 26</b><span>Строга проверка на конкурентността от самото начало — по-евтино е сега, отколкото след година.</span></li>
+          <li><b>SwiftUI</b><span>Целият интерфейс. Дава виджетите и watchOS почти безплатно от същия код.</span></li>
+          <li><b>@Observable</b><span>Съвременният подход за състояние; замества ObservableObject.</span></li>
+          <li><b>iOS 18 стига</b><span>Този дизайн не използва Liquid Glass, значи не се налага да чакаш потребителите да минат на iOS 26.</span></li>
+        </ul>
+      </div>
+
+      <div class="tg">
+        <h3>Изгледът от мокъпите</h3>
+        <ul>
+          <li><b>Обикновен VStack с layoutPriority</b><span>Колоната е подредба с пропорционални тегла — не е графика. Строи се с вградени средства.</span></li>
+          <li><b>Archivo · Instrument Sans</b><span>Вграждат се като шрифтови файлове. Archivo е променлив, значи един файл покрива всички тежести.</span></li>
+          <li><b>monospacedDigit()</b><span>Табулярни цифри, за да не подскачат сумите при обновяване.</span></li>
+          <li><b>Без сенки и материали</b><span>Нула blur, нула gradient. Това прави и рисуването значително по-евтино откъм батерия.</span></li>
+        </ul>
+      </div>
+
+      <div class="tg">
+        <h3>Данни</h3>
+        <ul>
+          <li><b>SwiftData</b><span>Локална база. Обекти: Transaction, Category, RecurringRule, Budget, Account.</span></li>
+          <li><b>CloudKit, частна база</b><span>Синхронизация между iPhone, iPad и Watch през iCloud на потребителя. Нула инфраструктура, нула месечен разход, силна позиция по GDPR.</span></li>
+          <li><b>NSFileProtectionComplete</b><span>Базата е нечетима при заключено устройство.</span></li>
+          <li><b>Без сървър</b><span>Появява се едва с банковата синхронизация през PSD2.</span></li>
+        </ul>
+      </div>
+
+      <div class="tg">
+        <h3>Бързо въвеждане</h3>
+        <ul>
+          <li><b>App Intents</b><span>Един интент „Запиши разход“ обслужва Siri, Преки пътища, виджета и Action Button наведнъж.</span></li>
+          <li><b>WidgetKit</b><span>Виджет за начален и заключен екран плюс усложнението за часовника.</span></li>
+          <li><b>VisionKit · DataScannerViewController</b><span>Сканиране на касова бележка, изцяло на устройството и безплатно.</span></li>
+          <li><b>TabularData</b><span>Внасяне на банково извлечение като CSV — работи с всяка банка, без интеграция.</span></li>
+        </ul>
+      </div>
+
+      <div class="tg">
+        <h3>Категоризиране</h3>
+        <ul>
+          <li><b>Правила първо</b><span>Речник търговец → категория за Лидл, Билла, Bolt, Spotify. Скучно, но хваща 80% и се поправя лесно.</span></li>
+          <li><b>NaturalLanguage · Core ML</b><span>Класификатор на устройството за останалото. Учи се от поправките, без данните да напускат телефона.</span></li>
+          <li><b>Поправка с една стъпка</b><span>Всяка поправка става ново правило. Това прави приложението точно след месец употреба.</span></li>
+        </ul>
+      </div>
+
+      <div class="tg">
+        <h3>Сигурност, пари, известия</h3>
+        <ul>
+          <li><b>LocalAuthentication</b><span>Заключване с Face ID при отваряне, включено по подразбиране.</span></li>
+          <li><b>StoreKit 2</b><span>Абонамент за премиум над безплатния план с ръчно въвеждане.</span></li>
+          <li><b>UserNotifications</b><span>Напомняния за предстоящи сметки. Локални — не е нужен push сървър.</span></li>
+          <li><b>Без SDK за проследяване</b><span>Нито едно. Продуктова позиция и по-лесен етикет за поверителност.</span></li>
+        </ul>
+      </div>
+
+      <div class="tg">
+        <h3>Разработка и издаване</h3>
+        <ul>
+          <li><b>Swift Testing</b><span>Логиката: разпределяне по категории, засичане на повтарящи се, границите в края на месеца.</span></li>
+          <li><b>String Catalogs</b><span>Български и английски от първия ден. Сумите минават през FormatStyle, не през ръчни низове.</span></li>
+          <li><b>Xcode Cloud или GitHub Actions</b><span>Автоматично изграждане и качване в TestFlight при всяко сливане.</span></li>
+          <li><b>TestFlight</b><span>Първите 20–30 потребители. Тук се мери седемдневното задържане.</span></li>
+        </ul>
+      </div>
+
+      <div class="tg">
+        <h3>Достъпност</h3>
+        <ul>
+          <li><b>Цветът никога не е сам</b><span>Всеки блок носи и име, и сума. Цветът ускорява, но не носи информация самостоятелно.</span></li>
+          <li><b>Dynamic Type</b><span>При едри шрифтове колоната минава към списък — пропорциите се показват като числа.</span></li>
+          <li><b>Увеличен контраст</b><span>При включен Increase Contrast мастилата потъмняват с една степен.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="decide">
+      <h3>Какво печелиш с този вариант</h3>
+      <p>Плоският дизайн сваля минималната версия на iOS от 26 на 18, което в момента е разликата между шепа потребители и почти всички. Няма <code>.glassEffect()</code>, няма материали, няма резервен слой за по-стари устройства. Освен това колоната е обикновена подредба, а не рисувана графика — значи работи безплатно на Apple&nbsp;Watch и в виджетите, където сложните чертежи струват батерия.</p>
+    </div>
+  </section>
+
+  <p class="fin">
+    Сумите, търговците и датите са примерни. Пропорциите в колоната са реални: празното отгоре, заделеното и всеки цветен блок са точен дял от приход 2&nbsp;340&nbsp;€, с долна граница на височината, за да остават четими най-малките категории.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var col = document.getElementById("hero-col");
+  if(!col) return;
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var v = col.querySelector(".void");
+  v.style.flexGrow = "2340";
+  v.style.transition = "flex-grow 1.15s cubic-bezier(.22,.68,.3,1) .3s";
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ v.style.flexGrow = "652.6"; });
+  });
+})();
+</script>

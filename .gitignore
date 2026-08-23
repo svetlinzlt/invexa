@@ -1,0 +1,38 @@
+# ── Тайни ────────────────────────────────────────────────────
+# service_role ключът заобикаля всяко правило за достъп. Никога в git.
+.env
+.env.local
+.env*.local
+
+# ── Xcode ────────────────────────────────────────────────────
+# Самият .xcodeproj се поражда от project.yml с `xcodegen generate`,
+# затова не се пази — иначе се чупи при всяко сливане.
+ios/*.xcodeproj/
+ios/*.xcworkspace/
+xcuserdata/
+DerivedData/
+*.xcuserstate
+.swiftpm/
+ios/InvexaCore/.build/
+
+# Шрифтовете имат собствен лиценз и тежат; свалят се отделно.
+ios/Invexa/Resources/Fonts/*.ttf
+ios/Invexa/Resources/Fonts/*.otf
+
+# ── Node и Next.js ───────────────────────────────────────────
+node_modules/
+web/.next/
+web/out/
+web/.vercel/
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Местни настройки ─────────────────────────────────────────
+# launch.json се споделя; settings.local.json е за тази машина.
+.claude/settings.local.json
+
+# ── Разни ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+*.log

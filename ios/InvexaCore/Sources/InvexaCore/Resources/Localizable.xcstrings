@@ -1,0 +1,141 @@
+{
+  "sourceLanguage" : "bg",
+  "version" : "1.0",
+  "strings" : {
+    "category.housing" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Жилище" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Housing" } }
+      }
+    },
+    "category.utilities" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Сметки и комунални" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bills & utilities" } }
+      }
+    },
+    "category.groceries" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Хранителни стоки" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Groceries" } }
+      }
+    },
+    "category.eating_out" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Заведения и храна навън" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Eating out" } }
+      }
+    },
+    "category.transport" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Транспорт" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Transport" } }
+      }
+    },
+    "category.shopping" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Пазаруване" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shopping" } }
+      }
+    },
+    "category.health" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Здраве" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Health" } }
+      }
+    },
+    "category.entertainment" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Развлечения и абонаменти" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Fun & subscriptions" } }
+      }
+    },
+    "category.travel" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Пътувания" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Travel" } }
+      }
+    },
+    "category.education" : {
+      "comment" : "Име на разходна категория",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Образование" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Education" } }
+      }
+    },
+    "category.other" : {
+      "comment" : "Име на разходна категория. Кошът за неразпознатото.",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Друго" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Other" } }
+      }
+    },
+
+    "movement.savings" : {
+      "comment" : "Вид движение на пари между собствени сметки",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Спестявания" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Savings" } }
+      }
+    },
+    "movement.investment" : {
+      "comment" : "Вид движение на пари между собствени сметки",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Инвестиции" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Investments" } }
+      }
+    },
+    "movement.debtRepayment" : {
+      "comment" : "Вид движение на пари между собствени сметки",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Погасяване" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Debt repayment" } }
+      }
+    },
+    "movement.internalTransfer" : {
+      "comment" : "Вид движение на пари между собствени сметки",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Превод" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Transfer" } }
+      }
+    },
+
+    "import.skip.noDate" : {
+      "comment" : "Причина ред от банково извлечение да бъде пропуснат",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Няма разчетима дата" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No readable date" } }
+      }
+    },
+    "import.skip.noAmount" : {
+      "comment" : "Причина ред от банково извлечение да бъде пропуснат",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Няма разчетима сума" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No readable amount" } }
+      }
+    },
+    "import.skip.zeroAmount" : {
+      "comment" : "Причина ред от банково извлечение да бъде пропуснат",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Сумата е нула" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Amount is zero" } }
+      }
+    },
+    "import.fallbackMerchant" : {
+      "comment" : "Име по подразбиране, когато редът няма описание",
+      "localizations" : {
+        "bg" : { "stringUnit" : { "state" : "translated", "value" : "Без описание" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No description" } }
+      }
+    }
+  }
+}

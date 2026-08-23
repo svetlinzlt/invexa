@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Общата папка, през която виджетът вижда същата база. Без нея
+	     виджетът показва празен месец. -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.app.invexa</string>
+	</array>
+
+	<!-- Синхронизацията между устройства минава през личния iCloud на
+	     потребителя. Няма мой сървър и няма регистрация. -->
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.app.invexa</string>
+	</array>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+</dict>
+</plist>

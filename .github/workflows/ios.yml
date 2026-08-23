@@ -1,0 +1,68 @@
+# Компилира приложението на чужд Mac, безплатно.
+#
+# GitHub дава изпълнители с macOS без пари за публични хранилища. Това е
+# начинът да разберем дали кодът се компилира, без да притежаваш Mac.
+#
+# Важното: сглобяването **за симулатор** не иска нито подпис, нито платен
+# акаунт в Apple. Значи целият код минава през истински компилатор и всяка
+# грешка излиза в лога, който можеш да ми покажеш.
+
+name: iOS
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:      # позволява ръчно пускане от бутон в GitHub
+
+jobs:
+
+  # ── Логиката: бързо, без Xcode проект ────────────────────────
+  core:
+    name: Логика и тестове
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 87-те теста
+        run: swift test --package-path ios/InvexaCore
+
+  # ── Приложението: пълно компилиране за симулатор ─────────────
+  app:
+    name: Компилиране на приложението
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: XcodeGen
+        run: brew install xcodegen
+
+      - name: Пораждане на проекта
+        run: xcodegen generate
+        working-directory: ios
+
+      # Шрифтовете липсват в хранилището заради лиценз и размер. Празните
+      # файлове стигат, за да не се спъне сглобяването — при истинско пускане
+      # се заменят с истинските.
+      - name: Заместващи шрифтове
+        run: |
+          mkdir -p ios/Invexa/Resources/Fonts
+          cd ios/Invexa/Resources/Fonts
+          for f in BodoniModa-Bold BodoniModa-BoldItalic HankenGrotesk-Regular \
+                   HankenGrotesk-Medium HankenGrotesk-SemiBold SplineSansMono-Regular; do
+            [ -f "$f.ttf" ] || touch "$f.ttf"
+          done
+
+      - name: Сглобяване
+        run: |
+          xcodebuild build \
+            -project ios/Invexa.xcodeproj \
+            -scheme Invexa \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee build.log
+        # Без подпис и без Team ID — за симулатор Apple не ги изисква.
+
+      - name: Само грешките, ако е паднало
+        if: failure()
+        run: grep -E "error:|warning:" build.log | head -60

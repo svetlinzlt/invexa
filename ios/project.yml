@@ -1,0 +1,110 @@
+# Конфигурация на Xcode проекта за XcodeGen.
+#
+# Файлът `.xcodeproj` е двоичен, огромен и се чупи при сливане. Затова тук
+# стои описанието му като текст, а самият проект се поражда с една команда:
+#
+#     brew install xcodegen && cd ios && xcodegen generate
+#
+# Ползата не е само удобство. Правата, App Group-ите и членството на файловете
+# по цели са най-честият източник на тихи грешки — забравена App Group на
+# виджета изглежда като липсващи данни, не като липсващо право. Тук те са
+# записани веднъж и се възпроизвеждат еднакво всеки път.
+
+name: Invexa
+
+options:
+  bundleIdPrefix: app.invexa
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    DEVELOPMENT_TEAM: ""          # ← попълва се с твоя Team ID от Apple Developer
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+packages:
+  InvexaCore:
+    path: InvexaCore
+
+targets:
+
+  # ── Приложението ─────────────────────────────────────────────
+  Invexa:
+    type: application
+    platform: iOS
+    sources:
+      - path: Invexa
+    dependencies:
+      - package: InvexaCore
+      - target: InvexaWidgets
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.invexa
+        CODE_SIGN_ENTITLEMENTS: Invexa/Invexa.entitlements
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        # Без този текст iOS отказва да покаже Face ID подканата.
+        INFOPLIST_KEY_NSFaceIDUsageDescription: "Заключва месеца ти, за да не се вижда от всеки, който вземе телефона."
+    info:
+      path: Invexa/Info.plist
+      properties:
+        CFBundleDisplayName: Invexa
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        # Схемата, с която виджетът отваря записването.
+        CFBundleURLTypes:
+          - CFBundleURLName: app.invexa
+            CFBundleURLSchemes: [invexa]
+        # Ако някой от файловете липсва, шрифтът пада тихо към системния и
+        # екранът изглежда почти правилно. Затова имената стоят изброени.
+        UIAppFonts:
+          - BodoniModa-Bold.ttf
+          - BodoniModa-BoldItalic.ttf
+          - HankenGrotesk-Regular.ttf
+          - HankenGrotesk-Medium.ttf
+          - HankenGrotesk-SemiBold.ttf
+          - SplineSansMono-Regular.ttf
+        ITSAppUsesNonExemptEncryption: false
+
+  # ── Виджетите ────────────────────────────────────────────────
+  InvexaWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: InvexaWidgets
+      # Виджетът е отделен процес и има нужда от същите типове. Изброяването
+      # им тук заменя ръчното отмятане на членство по цели — стъпката, която
+      # най-лесно се забравя при добавяне на нов файл.
+      - path: Invexa/Design
+      - path: Invexa/Storage
+    dependencies:
+      - package: InvexaCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.invexa.widgets
+        CODE_SIGN_ENTITLEMENTS: InvexaWidgets/InvexaWidgets.entitlements
+    info:
+      path: InvexaWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Invexa
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+
+schemes:
+  Invexa:
+    build:
+      targets:
+        Invexa: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - InvexaCore/InvexaCoreTests
