@@ -196,9 +196,13 @@ private struct FlowRow: View {
 
         switch flow.kind {
         case .expense:
-            parts.append(SpendingCategory.named(flow.categoryID ?? "")?.name ?? "Друго")
+            // Името на категорията вече е преведено в ядрото.
+            parts.append(
+                SpendingCategory.named(flow.categoryID ?? "")?.name
+                    ?? String(localized: "Друго")
+            )
         case .income:
-            parts.append("Приход")
+            parts.append(String(localized: "Приход"))
         case .movement:
             parts.append((flow.movement ?? .internalTransfer).name)
         }

@@ -94,7 +94,13 @@ struct AddRecurringSheet: View {
 
     /// `Calendar` брои от неделя, затова неделя е първа и тук — иначе изборът
     /// на потребителя ще се разминава с падежа с един ден.
-    private let weekdayNames = ["неделя", "понеделник", "вторник", "сряда", "четвъртък", "петък", "събота"]
+    /// Имената идват от календара на устройството, а не от закован списък:
+    /// така се превеждат сами и следват езика, без да се поддържат тук.
+    private var weekdayNames: [String] {
+        var calendar = Calendar.current
+        calendar.locale = .autoupdatingCurrent
+        return calendar.standaloneWeekdaySymbols
+    }
 
     private var categoryPicker: some View {
         ScrollView(.horizontal) {

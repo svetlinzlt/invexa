@@ -235,35 +235,34 @@ struct QuickAddSheet: View {
     private var isToday: Bool { Calendar.current.isDateInToday(date) }
 
     private var dateLabel: String {
-        if isToday { return "Днес" }
-        if Calendar.current.isDateInYesterday(date) { return "Вчера" }
-        return date.formatted(
-            .dateTime.day().month(.wide).locale(Locale(identifier: "bg_BG"))
-        )
+        if isToday { return String(localized: "Днес") }
+        if Calendar.current.isDateInYesterday(date) { return String(localized: "Вчера") }
+        // Датата се форматира по езика на устройството, не по закован локал.
+        return date.formatted(.dateTime.day().month(.wide))
     }
 
     private var title: String {
         switch (isEditing, kind) {
-        case (true, _): "Редакция"
-        case (false, .expense): "Нов разход"
-        case (false, .income): "Нов приход"
-        case (false, .movement): "Заделяне"
+        case (true, _): String(localized: "Редакция")
+        case (false, .expense): String(localized: "Нов разход")
+        case (false, .income): String(localized: "Нов приход")
+        case (false, .movement): String(localized: "Заделяне")
         }
     }
 
     private var placeholder: String {
         switch kind {
-        case .expense: "Къде?"
-        case .income: "Откъде? Например: заплата"
-        case .movement: "Накъде? Например: спестовна сметка"
+        case .expense: String(localized: "Къде?")
+        case .income: String(localized: "Откъде? Например: заплата")
+        case .movement: String(localized: "Накъде? Например: спестовна сметка")
         }
     }
 
     private var defaultName: String {
         switch kind {
-        case .expense: "Без име"
-        case .income: "Приход"
-        case .movement: "Заделено"
+        case .expense: String(localized: "Без име")
+        case .income: String(localized: "Приход")
+        case .movement: String(localized: "Заделено")
         }
     }
 

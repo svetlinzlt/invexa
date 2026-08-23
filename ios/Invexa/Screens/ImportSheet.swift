@@ -142,15 +142,13 @@ struct ImportSheet: View {
     }
 
     private func subtitle(_ candidate: ImportCandidate, duplicate: Bool) -> String {
-        let date = candidate.date.formatted(
-            .dateTime.day().month(.abbreviated).locale(Locale(identifier: "bg_BG"))
-        )
+        let date = candidate.date.formatted(.dateTime.day().month(.abbreviated))
         let category = candidate.kind == .expense
             ? SpendingCategory.named(candidate.suggestedCategory)?.name
-            : "Приход"
+            : String(localized: "Приход")
 
         var parts = [date, category].compactMap { $0 }
-        if duplicate { parts.append("вече записан") }
+        if duplicate { parts.append(String(localized: "вече записан")) }
         return parts.joined(separator: " · ")
     }
 
@@ -189,7 +187,7 @@ struct ImportSheet: View {
 
             // Файлът идва отвън и достъпът трябва да се поиска изрично.
             guard url.startAccessingSecurityScopedResource() else {
-                failure = "Няма достъп до файла. Опитай да го копираш във Файлове и избери оттам."
+                failure = String(localized: "Няма достъп до файла. Опитай да го копираш във Файлове и избери оттам.")
                 return
             }
             defer { url.stopAccessingSecurityScopedResource() }
@@ -203,14 +201,14 @@ struct ImportSheet: View {
 
             let parsed = StatementImporter.read(csv: text, categorizer: categorizer)
             guard !parsed.candidates.isEmpty else {
-                failure = "Във файла няма разчетими редове. Провери дали има колони за дата, сума и описание."
+                failure = String(localized: "Във файла няма разчетими редове. Провери дали има колони за дата, сума и описание.")
                 return
             }
 
             report = parsed
             chosen = Set(selectable(parsed).map(\.id))
         } catch {
-            failure = "Файлът не се отвори: \(error.localizedDescription)"
+            failure = String(localized: "Файлът не се отвори: \(error.localizedDescription)")
         }
     }
 

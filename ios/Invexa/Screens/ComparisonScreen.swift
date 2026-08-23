@@ -125,11 +125,17 @@ struct ComparisonScreen: View {
 
     private var verdictText: String {
         guard comparison.previous != nil else {
-            return "Още няма с какво да се сравни. Следващият месец ще има."
+            return String(localized: "Още няма с какво да се сравни. Следващият месец ще има.")
         }
-        let direction = comparison.delta.minorUnits <= 0 ? "под" : "над"
+
         let average = comparison.averageOfCompleted.formatted()
-        return "\(direction) предходния месец на същия ден. Средно за завършените месеци: \(average)."
+
+        // Двете посоки са отделни изречения, а не сглобени от част. На
+        // английски „under“ и „over“ не стоят на същото място в изречението и
+        // сглобяването от парчета дава несвързан текст.
+        return comparison.delta.minorUnits <= 0
+            ? String(localized: "под предходния месец на същия ден. Средно за завършените месеци: \(average).")
+            : String(localized: "над предходния месец на същия ден. Средно за завършените месеци: \(average).")
     }
 
     private var deltas: some View {

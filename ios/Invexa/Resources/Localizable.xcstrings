@@ -1,0 +1,210 @@
+{
+  "sourceLanguage" : "bg",
+  "version" : "1.0",
+  "strings" : {
+    "Влезли" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Came in" } } } },
+    "Заделени" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Set aside" } } } },
+    "Остават" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Left" } } } },
+    "Къде отидоха" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Where it went" } } } },
+    "ДНЕС" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "TODAY" } } } },
+    "похарчено за целия месец" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "spent over the whole month" } } } },
+    "похарчено за %lld от %lld дни" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "spent over %1$lld of %2$lld days" } } } },
+    "Месецът още е празен" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "The month is still empty" } } } },
+    "Запиши първия разход. Отнема около три секунди и кривата започва да се оформя." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Log the first expense. It takes about three seconds and the curve starts to take shape." } } } },
+
+    "Месец" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Month" } } } },
+    "Дневник" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Ledger" } } } },
+    "Повтарящи" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Recurring" } } } },
+    "Сравнение" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Compare" } } } },
+    "Настройки" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } } } },
+
+    "Запиши разход" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Log an expense" } } } },
+    "Нов разход" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "New expense" } } } },
+    "Нов приход" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "New income" } } } },
+    "Заделяне" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Set aside" } } } },
+    "Редакция" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit" } } } },
+    "Разход" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Expense" } } } },
+    "Приход" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Income" } } } },
+    "Къде?" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Where?" } } } },
+    "Откъде? Например: заплата" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "From where? For example: salary" } } } },
+    "Накъде? Например: спестовна сметка" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "To where? For example: savings account" } } } },
+    "Приходите не се категоризират." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Income isn't categorised." } } } },
+    "Запиши" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Save" } } } },
+    "Запази" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Save changes" } } } },
+    "Без име" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Unnamed" } } } },
+    "Заделено" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Set aside" } } } },
+    "Днес" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Today" } } } },
+    "Вчера" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Yesterday" } } } },
+    "Изтрий записа" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete entry" } } } },
+
+    "Този месец още няма записи." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "No entries this month yet." } } } },
+    "Внеси извлечение от файл" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Import a statement from a file" } } } },
+    "повтарящ се" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "recurring" } } } },
+    "Друго" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Other" } } } },
+
+    "Абонаменти и сметки" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Subscriptions and bills" } } } },
+    "Повтарящи се" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Recurring" } } } },
+    "Месечно" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Monthly" } } } },
+    "Седмично" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Weekly" } } } },
+    "Годишно" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Yearly" } } } },
+    "Предстоят" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Coming up" } } } },
+    "Минали този месец" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Past, this month" } } } },
+    "Записах го" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "I paid it" } } } },
+    "Спри" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Stop" } } } },
+    "записан" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "logged" } } } },
+    "не е в дневника" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "not in the ledger" } } } },
+    "днес" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "today" } } } },
+    "утре" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "tomorrow" } } } },
+    "след %lld дни" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "in %lld days" } } } },
+    "следващ месец" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "next month" } } } },
+    "Още няма повтарящи се плащания" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "No recurring payments yet" } } } },
+    "Добави наема, тока и абонаментите. После приложението ще ти казва какво идва, преди да е излязло." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Add the rent, the electricity and the subscriptions. Then the app tells you what's coming, before it leaves." } } } },
+    "Добави плащане" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Add a payment" } } } },
+    "Добави повтарящо се плащане" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Add a recurring payment" } } } },
+    "Ново повтарящо се плащане" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "New recurring payment" } } } },
+    "Например: Наем" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "For example: Rent" } } } },
+    "Колко често" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "How often" } } } },
+    "Ден от месеца" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Day of the month" } } } },
+    "Ден от седмицата" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Day of the week" } } } },
+
+    "Последни %lld месеца" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Last %lld months" } } } },
+    "Месец до месец" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Month by month" } } } },
+    "Най-голяма промяна" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Biggest change" } } } },
+    "Още няма с какво да се сравни. Следващият месец ще има." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Nothing to compare against yet. Next month there will be." } } } },
+    "под предходния месец на същия ден. Средно за завършените месеци: %@." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "under last month on the same day. Average across completed months: %@." } } } },
+    "над предходния месец на същия ден. Средно за завършените месеци: %@." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "over last month on the same day. Average across completed months: %@." } } } },
+
+    "Внасяне от файл" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Import from a file" } } } },
+    "Избери CSV файл от банката си" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Pick a CSV file from your bank" } } } },
+    "Разчитат се дата, сума и описание. Ще видиш какво е намерено, преди нещо да се запише." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Date, amount and description are read. You'll see what was found before anything is saved." } } } },
+    "Избери файл" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Pick a file" } } } },
+    "Всички" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "All" } } } },
+    "Никой" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "None" } } } },
+    "вече записан" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "already logged" } } } },
+    "Няма достъп до файла. Опитай да го копираш във Файлове и избери оттам." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "No access to the file. Try copying it into Files and picking it there." } } } },
+    "Във файла няма разчетими редове. Провери дали има колони за дата, сума и описание." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "No readable rows in the file. Check that it has columns for date, amount and description." } } } },
+    "Файлът не се отвори: %@" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "The file didn't open: %@" } } } },
+
+    "Заключвай с Face ID" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Lock with Face ID" } } } },
+    "Приложението показва целия ти месец. Заключването пречи на всеки, който вземе телефона отключен, да го види." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "The app shows your whole month. The lock stops anyone who picks up an unlocked phone from seeing it." } } } },
+    "Научени правила" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Learned rules" } } } },
+    "Още няма научени правила." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "No learned rules yet." } } } },
+    "Всеки път, когато поправиш категория, приложението го запомня. Тук се виждат тези правила и се махат с плъзгане." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Every time you correct a category, the app remembers it. Those rules are listed here and swipe removes them." } } } },
+    "Данни" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Data" } } } },
+    "Записи" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Entries" } } } },
+    "Изтрий всички данни" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete all data" } } } },
+    "Изтрий всичко" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete everything" } } } },
+    "Изтриване на всички данни" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete all data" } } } },
+    "Изчезват %1$lld записа и %2$lld повтарящи се плащания. Няма връщане назад." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld entries and %2$lld recurring payments disappear. There is no undo." } } } },
+    "Данните живеят на телефона ти и в твоя iCloud. Нямам сървър и нямам достъп до тях. Изтриването тук ги маха от всички твои устройства." : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Your data lives on your phone and in your iCloud. I have no server and no access to it. Deleting here removes it from all your devices." } } } },
+    "Версия" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Version" } } } },
+    "Пиши ми" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Write to me" } } } },
+    "Готово" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Done" } } } },
+    "Отказ" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } } } },
+
+    "Invexa е заключено" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Invexa is locked" } } } },
+    "Отключи" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Unlock" } } } },
+    "Отключи, за да видиш месеца си" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Unlock to see your month" } } } },
+    "Дневните разходи за месеца" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Daily spending for the month" } } } },
+    "Предходен месец" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Previous month" } } } },
+    "Следващ месец" : { "localizations" : {
+      "en" : { "stringUnit" : { "state" : "translated", "value" : "Next month" } } } }
+  }
+}
