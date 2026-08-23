@@ -115,11 +115,14 @@ struct MonthScreen: View {
     /// Текущият месец тече, миналите са приключили. Да пише „за 31 от 31 дни"
     /// на завършен месец е вярно и безполезно.
     private var subtitle: String {
+        // `String(localized:)`, а не гол литерал: `Text(String)` подава текста
+        // както е и не го превежда. Само `Text("литерал")` минава през
+        // `LocalizedStringKey`.
         let total = month.dayCount(in: calendar)
         guard let day = month.dayIndex(of: .now, in: calendar) else {
-            return "похарчено за целия месец"
+            return String(localized: "похарчено за целия месец")
         }
-        return "похарчено за \(day) от \(total) дни"
+        return String(localized: "похарчено за \(day) от \(total) дни")
     }
 }
 
@@ -138,7 +141,7 @@ struct FlowTriplet: View {
         .clipShape(RoundedRectangle(cornerRadius: 13, style: .continuous))
     }
 
-    private func cell(_ title: String, _ value: Money, _ tint: Color) -> some View {
+    private func cell(_ title: LocalizedStringResource, _ value: Money, _ tint: Color) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             CapLabel(title)
             Text(value.formatted())

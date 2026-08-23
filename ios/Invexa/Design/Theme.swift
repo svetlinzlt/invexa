@@ -81,7 +81,18 @@ extension Font {
 public struct CapLabel: View {
     private let text: String
 
-    public init(_ text: String) { self.text = text }
+    /// Приема `LocalizedStringResource`, а не `String`. Разликата е
+    /// съществена: `Text(String)` подава текста както е и **не** превежда,
+    /// затова надписи като „Влезли" щяха да останат на български завинаги.
+    public init(_ resource: LocalizedStringResource) {
+        self.text = String(localized: resource)
+    }
+
+    /// За текст, който вече е форматиран — име на месец, сума, име на
+    /// търговец. Той не се превежда, защото няма какво.
+    public init(verbatim text: String) {
+        self.text = text
+    }
 
     public var body: some View {
         Text(text.uppercased())

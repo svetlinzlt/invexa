@@ -124,7 +124,8 @@ private struct DayHeader: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            CapLabel(title)
+            // Датата вече е форматирана по езика на устройството.
+            CapLabel(verbatim: title)
             Spacer()
             Text(total)
                 .font(.ledger(9))
@@ -196,9 +197,13 @@ private struct FlowRow: View {
 
         switch flow.kind {
         case .expense:
-            parts.append(SpendingCategory.named(flow.categoryID ?? "")?.name ?? "Друго")
+            // Името на категорията вече е преведено в ядрото.
+            parts.append(
+                SpendingCategory.named(flow.categoryID ?? "")?.name
+                    ?? String(localized: "Друго")
+            )
         case .income:
-            parts.append("Приход")
+            parts.append(String(localized: "Приход"))
         case .movement:
             parts.append((flow.movement ?? .internalTransfer).name)
         }

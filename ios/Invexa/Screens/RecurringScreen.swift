@@ -252,17 +252,17 @@ private struct ChargeRow: View {
         let timing: String
 
         if isPaid {
-            timing = "записан"
+            timing = String(localized: "записан")
         } else if onRecord != nil {
-            timing = "не е в дневника"
+            timing = String(localized: "не е в дневника")
         } else if daysAway == 0 {
-            timing = "днес"
+            timing = String(localized: "днес")
         } else if daysAway == 1 {
-            timing = "утре"
+            timing = String(localized: "утре")
         } else if daysAway <= 7 {
-            timing = "след \(daysAway) дни"
+            timing = String(localized: "след \(daysAway) дни")
         } else {
-            timing = "следващ месец"
+            timing = String(localized: "следващ месец")
         }
 
         return [timing, category].compactMap { $0 }.joined(separator: " · ")
