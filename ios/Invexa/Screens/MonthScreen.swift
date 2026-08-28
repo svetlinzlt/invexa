@@ -219,6 +219,15 @@ struct BudgetList: View {
                                 .font(.ui(11.5, weight: .medium))
                                 .foregroundStyle(Palette.text)
                             Spacer()
+                            // Знак до числото, а не само цвят: виолетово и
+                            // ментово са неразличими за част от хората, а
+                            // „над лимита" не бива да зависи от това дали ги
+                            // различаваш.
+                            if status.state != .comfortable {
+                                Image(systemName: status.isOver ? "exclamationmark.circle.fill" : "clock")
+                                    .font(.system(size: 9))
+                                    .foregroundStyle(tint(status.state))
+                            }
                             Text(caption(status))
                                 .font(.ledger(10.5))
                                 .foregroundStyle(tint(status.state))
@@ -234,6 +243,10 @@ struct BudgetList: View {
                         }
                         .frame(height: 4)
                     }
+                    // Лентата е декорация; смисълът се чете наведнъж.
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(SpendingCategory.named(status.categoryID)?.name ?? status.categoryID))
+                    .accessibilityValue(Text(caption(status)))
                 }
             }
             .padding(16)
