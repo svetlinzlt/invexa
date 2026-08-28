@@ -11,6 +11,7 @@ struct MonthScreen: View {
     private let monthControl: () -> AnyView
 
     @Query private var stored: [StoredFlow]
+    @Query private var budgets: [StoredBudget]
 
     init(
         month: YearMonth = YearMonth(containing: .now),
@@ -59,7 +60,9 @@ struct MonthScreen: View {
                 MonthCurve(dailySpending: summary.dailySpending, todayIndex: todayIndex)
                     .frame(height: 96)
                 axis
+                if let pace { PaceRow(text: pace) }
                 FlowTriplet(summary: summary)
+                BudgetList(statuses: budgetStatuses)
                 CategoryList(totals: summary.byCategory)
             }
             .padding(.horizontal, 16)
@@ -105,6 +108,26 @@ struct MonthScreen: View {
         .tracking(1)
         .foregroundStyle(Palette.textFaint)
         .padding(.horizontal, 4)
+    }
+
+    private var budgetStatuses: [BudgetStatus] {
+        guard !budgets.isEmpty else { return [] }
+        let day = month.dayIndex(of: .now, in: calendar) ?? month.dayCount(in: calendar)
+        return summary.budgetStatuses(budgets.map(\.asBudget), through: day, calendar: calendar)
+    }
+
+    /// Прогнозата превръща екрана от отчет в предупреждение — а
+    /// предупреждението е причината някой да отвори приложението втори път.
+    ///
+    /// Показва се само докато месецът тече и има от какво да се смята темпо.
+    private var pace: String? {
+        guard let day = month.dayIndex(of: .now, in: calendar), day >= 3,
+              summary.spent.minorUnits > 0 else { return nil }
+
+        let projected = summary.projectedTotal(through: day)
+        return String(
+            localized: "При това темпо месецът свършва на \(projected.formatted())."
+        )
     }
 
     private var monthTitle: String {
@@ -154,6 +177,84 @@ struct FlowTriplet: View {
         .padding(.horizontal, 11)
         .padding(.vertical, 12)
         .background(Palette.inkRaised.opacity(0.62))
+    }
+}
+
+struct PaceRow: View {
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "chart.line.uptrend.xyaxis")
+                .font(.system(size: 13))
+                .foregroundStyle(Palette.textDim)
+            Text(text)
+                .font(.ui(11.5))
+                .foregroundStyle(Palette.textDim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 11)
+        .frostedPanel(cornerRadius: 13)
+    }
+}
+
+/// Лимитите по категории.
+///
+/// Тонът е нарочно безстрастен: „остават 40 € от 300" е информация,
+/// „прекали с ресторантите" е присъда. Приложението не съди.
+struct BudgetList: View {
+    let statuses: [BudgetStatus]
+
+    var body: some View {
+        if !statuses.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                CapLabel("Лимити")
+
+                ForEach(statuses.prefix(4)) { status in
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(alignment: .firstTextBaseline) {
+                            Text(SpendingCategory.named(status.categoryID)?.name ?? status.categoryID)
+                                .font(.ui(11.5, weight: .medium))
+                                .foregroundStyle(Palette.text)
+                            Spacer()
+                            Text(caption(status))
+                                .font(.ledger(10.5))
+                                .foregroundStyle(tint(status.state))
+                        }
+
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                Capsule().fill(Palette.hairline)
+                                Capsule()
+                                    .fill(tint(status.state))
+                                    .frame(width: geometry.size.width * min(1, status.share))
+                            }
+                        }
+                        .frame(height: 4)
+                    }
+                }
+            }
+            .padding(16)
+            .frostedPanel()
+        }
+    }
+
+    /// Когато лимитът е надхвърлен, числото казва с колко — това е
+    /// действената информация, не процентът.
+    private func caption(_ s: BudgetStatus) -> String {
+        s.isOver
+            ? String(localized: "над с \(s.remaining.magnitude.formatted())")
+            : String(localized: "остават \(s.remaining.formatted())")
+    }
+
+    private func tint(_ state: BudgetStatus.State) -> Color {
+        switch state {
+        case .comfortable: Palette.mint
+        case .ahead: Palette.brass
+        case .over: Palette.violet
+        }
     }
 }
 
