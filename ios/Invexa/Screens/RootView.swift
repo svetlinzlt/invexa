@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import InvexaCore
 
 /// Държи навигацията и двата листа за записване. Екраните под него не знаят
@@ -19,6 +20,9 @@ struct RootView: View {
     /// иначе прескачането между дневника и разбивката те връща в текущия
     /// месец и се губи мястото, докъдето си стигнал.
     @State private var month = YearMonth(containing: .now)
+    @State private var isWelcoming = WelcomeSheet.shouldShow
+
+    @Query private var rules: [StoredRecurringRule]
 
     var body: some View {
         ZStack {
@@ -82,6 +86,14 @@ struct RootView: View {
             QuickAddSheet(editing: flow)
                 .presentationDetents([.height(470)])
                 .presentationBackground(.clear)
+        }
+        .sheet(isPresented: $isWelcoming) {
+            WelcomeSheet()
+        }
+        // Пренасрочва при всяка промяна в правилата и при първо отваряне.
+        // Известие за отменено плащане е по-лошо от липсващо.
+        .task(id: rules.count) {
+            await Reminders.reschedule(rules: rules.map(\.asRule), calendar: .current)
         }
         .onOpenURL { url in
             // Докосването на виджета води тук. Схемата се обявява в Info.plist

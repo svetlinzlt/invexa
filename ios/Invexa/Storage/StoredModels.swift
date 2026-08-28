@@ -141,6 +141,26 @@ extension StoredRecurringRule {
     }
 }
 
+/// Месечен лимит за категория.
+///
+/// Пази се само зададеното. Липсващ запис значи „няма лимит", а не „лимит
+/// нула" — разликата е между категория, която не следиш, и категория, в която
+/// нямаш право да харчиш.
+@Model
+public final class StoredBudget {
+    public var categoryID: String = SpendingCategory.fallbackID
+    public var minorUnits: Int = 0
+
+    public init(categoryID: String = SpendingCategory.fallbackID, minorUnits: Int = 0) {
+        self.categoryID = categoryID
+        self.minorUnits = minorUnits
+    }
+
+    public var asBudget: Budget {
+        Budget(categoryID: categoryID, limit: Money(minorUnits: minorUnits))
+    }
+}
+
 /// Правилата, научени от поправките на потребителя. Вградените живеят в кода
 /// и не се записват — само наученото има нужда да преживее преинсталация.
 @Model

@@ -23,6 +23,7 @@ public enum InvexaStore {
             StoredFlow.self,
             StoredRecurringRule.self,
             StoredCategoryRule.self,
+            StoredBudget.self,
         ])
     }
 

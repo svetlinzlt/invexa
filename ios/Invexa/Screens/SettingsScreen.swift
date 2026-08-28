@@ -16,6 +16,7 @@ struct SettingsScreen: View {
 
     @Query private var flows: [StoredFlow]
     @Query private var rules: [StoredRecurringRule]
+    @Query private var budgets: [StoredBudget]
 
     /// Настройката живее в App Group, за да я вижда и `AppLock`.
     @AppStorage("lock.enabled", store: UserDefaults(suiteName: InvexaStore.appGroupID))
@@ -26,6 +27,7 @@ struct SettingsScreen: View {
     var body: some View {
         NavigationStack {
             List {
+                budgetSection
                 lockSection
                 learnedSection
                 dataSection
@@ -43,6 +45,61 @@ struct SettingsScreen: View {
             }
         }
         .preferredColorScheme(.dark)
+    }
+
+    // MARK: - Лимити
+
+    private var budgetSection: some View {
+        Section {
+            ForEach(SpendingCategory.defaults) { category in
+                HStack {
+                    Text(category.name)
+                        .foregroundStyle(Palette.text)
+                    Spacer()
+                    TextField(
+                        "без лимит",
+                        text: Binding(
+                            get: { limitText(for: category.id) },
+                            set: { setLimit($0, for: category.id) }
+                        )
+                    )
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(maxWidth: 90)
+                    .foregroundStyle(Palette.violet)
+                }
+            }
+        } header: {
+            Text("Месечни лимити")
+        } footer: {
+            // Правилото се обяснява веднъж тук, за да не изненадва на
+            // началния екран.
+            Text("Празно поле значи, че категорията не се следи. Лимитът се сравнява с темпото за деня от месеца, не с целия месец — иначе би мълчал точно когато има какво да се направи.")
+        }
+        .listRowBackground(Color.white.opacity(0.06))
+    }
+
+    private func limitText(for id: String) -> String {
+        guard let record = budgets.first(where: { $0.categoryID == id }),
+              record.minorUnits > 0 else { return "" }
+        return String(record.minorUnits / 100)
+    }
+
+    /// Записва в цели евро: лимит от 300,47 € няма смисъл, а стотинките само
+    /// удължават писането на телефон.
+    private func setLimit(_ text: String, for id: String) {
+        let euros = Int(text.filter(\.isNumber)) ?? 0
+        let existing = budgets.first { $0.categoryID == id }
+
+        if euros <= 0 {
+            if let existing { context.delete(existing) }
+            return
+        }
+        if let existing {
+            existing.minorUnits = euros * 100
+        } else {
+            context.insert(StoredBudget(categoryID: id, minorUnits: euros * 100))
+        }
     }
 
     // MARK: - Заключване
@@ -141,7 +198,10 @@ struct SettingsScreen: View {
             try context.delete(model: StoredFlow.self)
             try context.delete(model: StoredRecurringRule.self)
             try context.delete(model: StoredCategoryRule.self)
+            try context.delete(model: StoredBudget.self)
             try context.save()
+            // Известията надживяват данните, ако не се махнат изрично.
+            Task { await Reminders.cancelAll() }
             InvexaStore.refreshWidgets()
             dismiss()
         } catch {
