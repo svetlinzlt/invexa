@@ -49,6 +49,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.invexa
         CODE_SIGN_ENTITLEMENTS: Invexa/Invexa.entitlements
+        # Иконата се поражда от `tools/make-icon.mjs`, не се рисува на ръка.
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     # Ключовете стоят тук, а не като INFOPLIST_KEY_* настройки: щом сочим
     # собствен Info.plist, Xcode спира да генерира и настройките се
     # пренебрегват мълчаливо. Тогава Face ID подканата изчезва без грешка.
