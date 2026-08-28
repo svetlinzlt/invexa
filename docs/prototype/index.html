@@ -100,6 +100,21 @@ svg.wave{display:block;width:100%;height:92px;margin-top:10px}
 .wave .dot{fill:var(--mint)}
 .flow b{font-family:"Bodoni Moda",Georgia,serif;font-weight:700;font-size:17px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .rows{padding:16px;display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.pace{padding:11px 14px;margin-top:14px;border-radius:13px;font-size:11.5px;color:var(--pale2)}
+[data-limit]{cursor:pointer}
+
+/* посрещане */
+#welcome{position:fixed;inset:0;z-index:30;background:var(--ink);display:none;
+  flex-direction:column;padding:calc(var(--top) + 20px) 26px calc(var(--bot) + 20px)}
+#welcome.open{display:flex}
+#welcome .skip{align-self:flex-end;font-size:13px;color:var(--pale3);cursor:pointer}
+#welcome .body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px}
+#welcome h3{font-family:"Bodoni Moda",Georgia,serif;font-weight:700;font-size:28px;
+  letter-spacing:-.02em;margin:0}
+#welcome p{font-size:14px;color:var(--pale2);margin:0}
+#welcome .dots{display:flex;gap:6px;justify-content:center;padding:14px 0}
+#welcome .dots i{width:6px;height:6px;border-radius:50%;background:var(--hair)}
+#welcome .dots i.on{background:var(--violet)}
 .row{display:flex;flex-direction:column;gap:6px}
 .rowl{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px}
 .rowl b{font-weight:500}
@@ -200,6 +215,16 @@ svg.wave{display:block;width:100%;height:92px;margin-top:10px}
 
 <div class="banner" id="banner"></div>
 
+<div id="welcome">
+  <span class="skip" id="wSkip">Пропусни</span>
+  <div class="body">
+    <h3 id="wTitle"></h3>
+    <p id="wBody"></p>
+  </div>
+  <div class="dots" id="wDots"></div>
+  <div class="go" id="wNext">Нататък</div>
+</div>
+
 <script>
 (function(){
 "use strict";
@@ -259,7 +284,7 @@ function seed(){
   add(18,50000,'Спестовна',null,'movement','savings');
   if(TODAY>=19) add(19,4200,'Кауфланд','groceries');
   if(TODAY>=21) add(21,3420,'Лидл','groceries');
-  return {flows:f.filter(x=>x.day<=TODAY), rules:[
+  return {flows:f.filter(x=>x.day<=TODAY), budgets:{groceries:30000,eating_out:15000,transport:12000}, rules:[
     {d:24,name:'Netflix',cents:1299,cat:'entertainment'},
     {d:26,name:'iCloud+',cents:299,cat:'entertainment'},
     {d:28,name:'Топлофикация',cents:3140,cat:'utilities'},
@@ -267,9 +292,32 @@ function seed(){
   ]};
 }
 function load(){
-  try{ const raw=localStorage.getItem(KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){ const s=JSON.parse(raw); s.budgets=s.budgets||{}; return s; }
+  }catch(e){}
   return seed();
 }
+
+/* ── Лимити ────────────────────────────────────────────────── */
+/* Сравнението е с темпото за деня от месеца, не с целия лимит. На 5-ти
+   40% от лимита е предупреждение; на 25-ти е нормално. Сравнението с
+   целия лимит би мълчало точно когато има какво да се направи. */
+function budgetStatuses(s){
+  const pace = Math.min(TODAY, DIM) / DIM;
+  const byCat = Object.fromEntries(s.cats);
+  return Object.entries(state.budgets||{})
+    .filter(([,limit])=>limit>0)
+    .map(([id,limit])=>{
+      const spent = byCat[id]||0;
+      const st = spent>limit ? 'over' : spent > limit*pace ? 'ahead' : 'ok';
+      return {id, spent, limit, state:st, share:spent/limit, left:limit-spent};
+    })
+    .sort((a,b)=>b.share-a.share);
+}
+/* Знак до числото, не само цвят: виолетово и ментово са неразличими за
+   част от хората, а „над лимита" не бива да зависи от това. */
+const BSTATE = {ok:['var(--mint)',''], ahead:['var(--brass)','◔ '], over:['var(--violet)','⚠ ']};
 function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
 
 /* ── Сметките — същите правила като в приложението ──────────── */
@@ -326,13 +374,38 @@ function screenMonth(){
       <div class="flow"><span class="cap">Заделени</span><b style="color:var(--brass)">${fmt(s.saved+s.invested)}</b></div>
       <div class="flow"><span class="cap">Остават</span><b>${fmt(s.remaining)}</b></div>
     </div>
+    ${paceRow(s)}
+    ${budgetBlock(s)}
     <div class="gl rows">
-      <span class="cap">Къде отидоха</span>
-      ${s.cats.length?s.cats.slice(0,6).map(([id,c])=>`<div class="row">
+      <span class="cap">Къде отидоха · докосни за лимит</span>
+      ${s.cats.length?s.cats.slice(0,6).map(([id,c])=>`<div class="row" data-limit="${id}">
         <div class="rowl"><b>${catName(id)}</b><span class="mono">${fmt(c)}</span></div>
         <div class="bar"><i style="width:${(c/top*100).toFixed(0)}%"></i></div></div>`).join('')
         :'<div class="sub">Още няма разходи. Докосни ➕ и запиши първия.</div>'}
     </div>`;
+}
+
+/* Прогнозата превръща екрана от отчет в предупреждение. Показва се чак
+   след третия ден: по-рано темпото е шум. */
+function paceRow(s){
+  if(TODAY<3 || s.spent<=0) return '';
+  const projected = Math.round(s.spent/TODAY)*DIM;
+  return `<div class="gl pace">↗ При това темпо месецът свършва на ${fmt(projected)}.</div>`;
+}
+
+function budgetBlock(s){
+  const list = budgetStatuses(s);
+  if(!list.length) return '';
+  return `<div class="gl rows"><span class="cap">Лимити</span>
+    ${list.slice(0,4).map(b=>{
+      const [tint,sign]=BSTATE[b.state];
+      return `<div class="row" data-limit="${b.id}">
+        <div class="rowl"><b>${catName(b.id)}</b>
+          <span class="mono" style="color:${tint}">${sign}${b.left<0?'над с '+fmt(-b.left):'остават '+fmt(b.left)}</span></div>
+        <div class="bar"><i style="width:${Math.min(100,b.share*100).toFixed(0)}%;background:${tint}"></i></div>
+      </div>`;
+    }).join('')}
+  </div>`;
 }
 
 function screenLedger(){
@@ -409,6 +482,16 @@ function render(){
   app.querySelectorAll('[data-del]').forEach(el=>el.addEventListener('click',()=>{
     state.flows=state.flows.filter(f=>f.id!==el.dataset.del); save(); render(); toast('Записът е изтрит');
   }));
+  app.querySelectorAll('[data-limit]').forEach(el=>el.addEventListener('click',()=>{
+    const id=el.dataset.limit, now=(state.budgets[id]||0)/100;
+    // Груб, но честен начин за прототип: истинското приложение има поле в
+    // настройките. Тук важното е дали лимитите се усещат полезни.
+    const answer=prompt(`Месечен лимит за „${catName(id)}" в евро.\nПразно поле маха лимита.`, now||'');
+    if(answer===null) return;
+    const euros=parseInt(String(answer).replace(/\D/g,''),10);
+    if(euros>0) state.budgets[id]=euros*100; else delete state.budgets[id];
+    save(); render(); toast(euros>0?'Лимитът е зададен':'Лимитът е махнат');
+  }));
 }
 
 /* ── Листът за записване ───────────────────────────────────── */
@@ -484,6 +567,40 @@ document.addEventListener('click',e=>{
   taps++; clearTimeout(tapTimer); tapTimer=setTimeout(()=>taps=0,600);
   if(taps>=3){ taps=0; state=seed(); save(); render(); toast('Данните са върнати в начално състояние'); }
 });
+
+/* ── Посрещане при първо отваряне ──────────────────────────── */
+/* Втората страница е причината това да съществува: разделението разход /
+   движение е разликата на продукта, а нищо не го обясняваше. */
+const WPAGES=[
+  ['Един въпрос','Отваряш и виждаш как върви месецът: колко е влязло, колко е излязло, колко остава и къде отиде. Без система, която трябва да учиш.','var(--violet)'],
+  ['Заделеното не е похарчено','Парите, които спестяваш или инвестираш, се броят отделно от разходите. Вноска към спестовна сметка не е разход — тя още е твоя. Повечето прости приложения ги смесват и показват грешна картина.','var(--brass)'],
+  ['Три секунди','Записваш с ➕ отдолу. Колкото по-малко усилие, толкова по-вярна е картината.','var(--mint)']
+];
+const WKEY='invexa.prototype.welcomed';
+let wPage=0;
+const wEl=document.getElementById('welcome');
+
+function drawWelcome(){
+  const [t,b,tint]=WPAGES[wPage];
+  document.getElementById('wTitle').textContent=t;
+  document.getElementById('wBody').textContent=b;
+  document.getElementById('wDots').innerHTML=WPAGES.map((_,i)=>`<i class="${i===wPage?'on':''}"></i>`).join('');
+  const next=document.getElementById('wNext');
+  next.textContent = wPage===WPAGES.length-1 ? 'Започни' : 'Нататък';
+  next.style.background = tint;
+}
+function endWelcome(){
+  wEl.classList.remove('open');
+  try{ localStorage.setItem(WKEY,'1'); }catch(e){}
+}
+document.getElementById('wSkip').addEventListener('click',endWelcome);
+document.getElementById('wNext').addEventListener('click',()=>{
+  if(wPage===WPAGES.length-1) endWelcome(); else { wPage++; drawWelcome(); }
+});
+
+let welcomed=false;
+try{ welcomed = localStorage.getItem(WKEY)==='1'; }catch(e){}
+if(!welcomed){ wEl.classList.add('open'); drawWelcome(); }
 
 render();
 })();
