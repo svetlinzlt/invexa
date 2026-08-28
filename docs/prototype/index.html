@@ -18,8 +18,36 @@
   --pale:#DEE5FA; --pale2:#9AA6CC; --pale3:#64709A;
   --panel:rgba(150,170,225,.075); --edge:rgba(190,206,255,.20);
   --hair:rgba(150,170,225,.16); --hair2:rgba(150,170,225,.09);
+  --glow1:rgba(91,73,196,.36); --glow2:rgba(42,158,133,.20);
+  --wave-fill:rgba(143,123,255,.22);
+  --cell:rgba(16,23,49,.62);
+  --chip-bg:rgba(150,170,225,.08);
+  --chip-on:rgba(143,123,255,.2); --chip-on-br:rgba(143,123,255,.5);
+  --good-bg:rgba(79,227,193,.09); --good-br:rgba(79,227,193,.26);
+  --warn-bg:rgba(143,123,255,.09); --warn-br:rgba(143,123,255,.26);
+  --key:rgba(150,170,225,.07); --key-hit:rgba(150,170,225,.16);
+  --onaccent:#0B0820;
   --top:env(safe-area-inset-top,0px);
   --bot:env(safe-area-inset-bottom,0px);
+}
+/* Светлата тема е същата, обърната: хартията е студено синьо-сива, не
+   кремава, а виолетовото потъмнява с една степен, за да остане четимо. */
+html[data-theme="light"]{
+  --ink:#DDE2EF; --ink2:#EAEDF6;
+  --violet:#4A38B8; --violet-lift:#6E5CD8;
+  --mint:#0F7C66; --brass:#8A6D1A;
+  --pale:#111A33; --pale2:#414D75; --pale3:#5B678F;
+  --panel:rgba(255,255,255,.55); --edge:rgba(255,255,255,.85);
+  --hair:rgba(40,50,90,.16); --hair2:rgba(40,50,90,.09);
+  --glow1:rgba(122,104,232,.26); --glow2:rgba(42,158,133,.16);
+  --wave-fill:rgba(74,56,184,.17);
+  --cell:rgba(255,255,255,.5);
+  --chip-bg:rgba(40,50,90,.06);
+  --chip-on:rgba(74,56,184,.14); --chip-on-br:rgba(74,56,184,.45);
+  --good-bg:rgba(15,124,102,.10); --good-br:rgba(15,124,102,.3);
+  --warn-bg:rgba(74,56,184,.09); --warn-br:rgba(74,56,184,.28);
+  --key:rgba(40,50,90,.05); --key-hit:rgba(40,50,90,.12);
+  --onaccent:#FFFFFF;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overscroll-behavior:none}
@@ -32,8 +60,17 @@ body{
 body::before{
   content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
-    radial-gradient(118% 60% at 50% -14%, rgba(91,73,196,.36) 0%, transparent 62%),
-    radial-gradient(92% 50% at 50% 110%, rgba(42,158,133,.20) 0%, transparent 64%);
+    radial-gradient(118% 60% at 50% -14%, var(--glow1) 0%, transparent 62%),
+    radial-gradient(92% 50% at 50% 110%, var(--glow2) 0%, transparent 64%);
+}
+/* Превключвателят стои над съдържанието, а не в таб лентата: тя е за
+   навигация, а темата не е място, където се ходи. */
+#theme{
+  position:fixed; z-index:5; top:calc(var(--top) + 10px); right:14px;
+  width:34px; height:34px; border-radius:12px; display:grid; place-items:center;
+  font-size:15px; cursor:pointer; color:var(--pale2);
+  background:var(--panel); border:1px solid var(--hair);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
 }
 #app{position:relative;z-index:1;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:calc(var(--top) + 14px) 16px 16px}
@@ -54,7 +91,13 @@ svg.wave{display:block;width:100%;height:92px;margin-top:10px}
 .axis{display:flex;justify-content:space-between;padding:6px 2px 0}
 .flows{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair2);
   border-radius:13px;overflow:hidden;margin-top:14px}
-.flow{padding:12px 10px;background:rgba(16,23,49,.62);display:flex;flex-direction:column;gap:5px}
+.flow{padding:12px 10px;background:var(--cell);display:flex;flex-direction:column;gap:5px}
+/* Цветовете на кривата идват от променливи, за да следват темата без
+   пречертаване. */
+.wave .fill{fill:var(--wave-fill)}
+.wave .line{stroke:var(--violet)}
+.wave .mark{stroke:var(--mint)}
+.wave .dot{fill:var(--mint)}
 .flow b{font-family:"Bodoni Moda",Georgia,serif;font-weight:700;font-size:17px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .rows{padding:16px;display:flex;flex-direction:column;gap:12px;margin-top:14px}
 .row{display:flex;flex-direction:column;gap:6px}
@@ -94,7 +137,7 @@ svg.wave{display:block;width:100%;height:92px;margin-top:10px}
 .tab i{font-style:normal;font-size:15px;opacity:.55}
 .tab.on{color:var(--violet)} .tab.on i{opacity:1}
 #addBtn{width:39px;height:39px;border-radius:15px;display:grid;place-items:center;font-size:22px;
-  color:#0B0820;background:linear-gradient(180deg,var(--violet-lift),var(--violet));
+  color:var(--onaccent);background:linear-gradient(180deg,var(--violet-lift),var(--violet));
   box-shadow:0 8px 20px -6px rgba(143,123,255,.8);cursor:pointer;flex:0 0 auto}
 
 /* лист */
@@ -112,12 +155,13 @@ svg.wave{display:block;width:100%;height:92px;margin-top:10px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
 .chips::-webkit-scrollbar{display:none}
 .chip{white-space:nowrap;font-size:10.5px;padding:6px 11px;border-radius:999px;
-  background:rgba(150,170,225,.08);border:1px solid var(--hair);color:var(--pale2);cursor:pointer}
+  background:var(--chip-bg);border:1px solid var(--hair);color:var(--pale2);cursor:pointer}
+.chip.on{background:var(--chip-on);border-color:var(--chip-on-br);color:var(--violet)}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .pad b{font-family:"Bodoni Moda",Georgia,serif;font-weight:500;font-size:20px;text-align:center;padding:11px 0;
-  border-radius:12px;background:rgba(150,170,225,.07);border:1px solid var(--hair2);cursor:pointer;user-select:none}
-.pad b:active{background:rgba(150,170,225,.16)}
-.go{text-align:center;padding:14px;border-radius:16px;font-size:14px;font-weight:600;color:#0B0820;cursor:pointer}
+  border-radius:12px;background:var(--key);border:1px solid var(--hair2);cursor:pointer;user-select:none}
+.pad b:active{background:var(--key-hit)}
+.go{text-align:center;padding:14px;border-radius:16px;font-size:14px;font-weight:600;color:var(--onaccent);cursor:pointer}
 .go.off{opacity:.45}
 .note{font-size:10.5px;color:var(--pale3);text-align:center}
 .banner{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--violet);color:#0B0820;
@@ -126,6 +170,7 @@ svg.wave{display:block;width:100%;height:92px;margin-top:10px}
 </head>
 <body>
 
+<div id="theme" title="Смени темата">☾</div>
 <div id="app"></div>
 
 <nav id="tabs" class="gl">
@@ -176,7 +221,30 @@ const DIM = daysInMonth(Y,M), TODAY = NOW.getDate();
 
 /* ── Състояние ─────────────────────────────────────────────── */
 const KEY = 'invexa.prototype.v1';
+const TKEY = 'invexa.prototype.theme';
 let state = load();
+
+/* ── Тема ──────────────────────────────────────────────────── */
+/* При първо отваряне следва настройката на телефона. След това помни
+   избора, защото изричното решение на човека бие системното. */
+function readTheme(){
+  try{ const t=localStorage.getItem(TKEY); if(t) return t; }catch(e){}
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('theme').textContent = t==='light' ? '☾' : '☀';
+  /* Лентата на състоянието в Safari следва фона, иначе стърчи. */
+  const m=document.querySelector('meta[name="theme-color"]');
+  if(m) m.setAttribute('content', t==='light' ? '#DDE2EF' : '#0A0F1F');
+}
+let theme = readTheme();
+applyTheme(theme);
+document.getElementById('theme').addEventListener('click',()=>{
+  theme = theme==='light' ? 'dark' : 'light';
+  applyTheme(theme);
+  try{ localStorage.setItem(TKEY, theme); }catch(e){}
+});
 
 function seed(){
   const f = [];
@@ -234,10 +302,10 @@ function wave(daily){
   }
   const tx=((TODAY-1)/(daily.length-1)*W).toFixed(1);
   return `<svg class="wave" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
-    <path d="${d} L${W},${H} L0,${H} Z" fill="rgba(143,123,255,.22)"/>
-    <path d="${d}" fill="none" stroke="#8F7BFF" stroke-width="2" stroke-linecap="round"/>
-    <line x1="${tx}" y1="0" x2="${tx}" y2="${H}" stroke="#4FE3C1" stroke-width=".9" stroke-opacity=".5" stroke-dasharray="2 3"/>
-    <circle cx="${tx}" cy="${pts[TODAY-1].y.toFixed(1)}" r="3.4" fill="#4FE3C1"/></svg>`;
+    <path class="fill" d="${d} L${W},${H} L0,${H} Z"/>
+    <path class="line" d="${d}" fill="none" stroke-width="2" stroke-linecap="round"/>
+    <line class="mark" x1="${tx}" y1="0" x2="${tx}" y2="${H}" stroke-width=".9" stroke-opacity=".5" stroke-dasharray="2 3"/>
+    <circle class="dot" cx="${tx}" cy="${pts[TODAY-1].y.toFixed(1)}" r="3.4"/></svg>`;
 }
 
 /* ── Екрани ────────────────────────────────────────────────── */
@@ -321,7 +389,7 @@ function screenCompare(){
         <span class="v">${Math.round(v/100)}</span>
         <span class="b" style="height:${(v/peak*100).toFixed(0)}%"></span>
         <span class="l">${labels[i]}</span></div>`).join('')}</div>
-      <div class="verdict" style="background:${good?'rgba(79,227,193,.09)':'rgba(143,123,255,.09)'};border:1px solid ${good?'rgba(79,227,193,.26)':'rgba(143,123,255,.26)'}">
+      <div class="verdict" style="background:var(${good?'--good-bg':'--warn-bg'});border:1px solid var(${good?'--good-br':'--warn-br'})">
         <b class="num" style="font-size:19px;color:${tint}">${delta>0?'+':'−'}${fmt(Math.abs(delta))}</b>
         <span style="font-size:10.5px;color:var(--pale2)">${good?'под':'над'} юли на същия ден от месеца. Средно за завършените: 1&nbsp;358,00&nbsp;€.</span>
       </div>
@@ -351,8 +419,7 @@ function chips(){
   const list = kind==='movement'?MOVES : kind==='income'?[] : CATS;
   const sel = kind==='movement'?mv:pick;
   document.getElementById('chips').innerHTML = list.length
-    ? list.map(([id,n])=>`<span class="chip${id===sel?' on':''}" data-c="${id}"
-        style="${id===sel?'background:rgba(143,123,255,.2);border-color:rgba(143,123,255,.5);color:var(--violet-lift)':''}">${n}</span>`).join('')
+    ? list.map(([id,n])=>`<span class="chip${id===sel?' on':''}" data-c="${id}">${n}</span>`).join('')
     : '<span class="note" style="padding:6px 2px">Приходите не се категоризират.</span>';
   document.querySelectorAll('#chips .chip').forEach(c=>c.addEventListener('click',()=>{
     if(kind==='movement') mv=c.dataset.c; else pick=c.dataset.c; chips();
