@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import InvexaCore
 
 /// Държи навигацията и двата листа за записване. Екраните под него не знаят
