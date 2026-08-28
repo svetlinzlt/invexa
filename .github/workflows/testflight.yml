@@ -1,0 +1,111 @@
+# Сглобява подписано приложение и го качва в TestFlight.
+#
+# Пуска се ръчно от раздела Actions, не при всяко изпращане: всяко качване
+# заема номер на версия в App Store Connect и е бавно.
+#
+# Ползва автоматично подписване с ключ за App Store Connect API. Така Xcode
+# сам създава и сваля профилите за четирите цели — приложение, виджет,
+# часовник и усложнение. Ръчният път значи четири профила, изнесени в
+# base64, и е несравнимо по-крехък.
+
+name: TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Какво да пише в бележката за тестерите"
+        required: false
+        default: "Ранна версия за проба"
+
+jobs:
+  upload:
+    name: Сглобяване и качване
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: XcodeGen
+        run: brew install xcodegen
+
+      - name: Шрифтове
+        run: |
+          mkdir -p ios/Invexa/Resources/Fonts
+          cd ios/Invexa/Resources/Fonts
+          for f in BodoniModa-Bold BodoniModa-BoldItalic HankenGrotesk-Regular \
+                   HankenGrotesk-Medium HankenGrotesk-SemiBold SplineSansMono-Regular; do
+            [ -f "$f.ttf" ] || touch "$f.ttf"
+          done
+
+      - name: Пораждане на проекта
+        run: xcodegen generate
+        working-directory: ios
+        env:
+          DEVELOPMENT_TEAM: ${{ secrets.TEAM_ID }}
+
+      # Ключът се пише във файл, който Xcode намира сам. Съдържанието му
+      # никога не се извежда в дневника.
+      - name: Ключ за App Store Connect
+        env:
+          KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+          KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$KEY" > ~/private_keys/AuthKey_${KEY_ID}.p8
+          chmod 600 ~/private_keys/AuthKey_${KEY_ID}.p8
+
+      - name: Номер на версията
+        id: build
+        run: echo "number=$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Архивиране
+        run: |
+          set -o pipefail
+          xcodebuild archive \
+            -project ios/Invexa.xcodeproj \
+            -scheme Invexa \
+            -destination 'generic/platform=iOS' \
+            -archivePath build/Invexa.xcarchive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8 \
+            -authenticationKeyID ${{ secrets.APPSTORE_API_KEY_ID }} \
+            -authenticationKeyIssuerID ${{ secrets.APPSTORE_API_ISSUER_ID }} \
+            DEVELOPMENT_TEAM=${{ secrets.TEAM_ID }} \
+            CURRENT_PROJECT_VERSION=${{ steps.build.outputs.number }} \
+            | tee archive.log
+
+      - name: Настройки за изнасяне
+        run: |
+          cat > build/ExportOptions.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>teamID</key><string>${{ secrets.TEAM_ID }}</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          PLIST
+
+      - name: Изнасяне и качване
+        run: |
+          set -o pipefail
+          xcodebuild -exportArchive \
+            -archivePath build/Invexa.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist build/ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath ~/private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8 \
+            -authenticationKeyID ${{ secrets.APPSTORE_API_KEY_ID }} \
+            -authenticationKeyIssuerID ${{ secrets.APPSTORE_API_ISSUER_ID }} \
+            | tee export.log
+
+      - name: Само грешките, ако е паднало
+        if: failure()
+        run: grep -hE "error:|Error Domain" archive.log export.log 2>/dev/null | sort -u | head -40
+
+      - name: Почистване на ключа
+        if: always()
+        run: rm -rf ~/private_keys
